@@ -14,7 +14,7 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText('cas.interleaf@gmail.com');
       setCopiedEmail(true);
-      setTimeout(() => setCopiedEmail(false), 2000); // Reset after 2 seconds
+      setTimeout(() => setCopiedEmail(false), 1300); // Reset after 2 seconds
     } catch (err) {
       console.error('Failed to copy email:', err);
     }
@@ -25,11 +25,7 @@ export default function Home() {
       name: 'Email',
       href: '#',
       onClick: handleCopyEmail,
-      icon: (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
-      ),
+      icon: <span className="material-symbols-rounded text-[28px]">mail</span>,
       color: 'text-[#EA4335]',
       label: copiedEmail ? 'Copied!' : 'cas.interleaf@gmail.com'
     },
@@ -72,14 +68,16 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up delay-200">
               <button 
                 onClick={() => setIsResumeOpen(true)}
-                className="btn btn-primary w-full sm:w-auto"
+                className="btn btn-primary w-full sm:w-auto flex items-center gap-2"
               >
+                <span className="material-symbols-rounded">description</span>
                 View Resume
               </button>
               <button 
                 onClick={() => setIsContactOpen(true)}
-                className="btn btn-secondary w-full sm:w-auto"
+                className="btn btn-secondary w-full sm:w-auto flex items-center gap-2"
               >
+                <span className="material-symbols-rounded">waving_hand</span>
                 Let's Connect
               </button>
             </div>
@@ -97,10 +95,11 @@ export default function Home() {
             {/* Social Innovation Card */}
             <div className="card group hover:-translate-y-2 animate-slide-up">
               <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto">
-                  <svg className="w-8 h-8 text-accent-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
-                  </svg>
+                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+                  <span className="material-symbols-rounded text-4xl text-accent-500">
+                    diversity_3
+                  </span>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
@@ -117,10 +116,11 @@ export default function Home() {
             {/* Development Card */}
             <div className="card group hover:-translate-y-2 animate-slide-up delay-100">
               <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto">
-                  <svg className="w-8 h-8 text-accent-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
-                  </svg>
+                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+                  <span className="material-symbols-rounded text-4xl text-accent-500">
+                    code_blocks
+                  </span>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
@@ -137,18 +137,19 @@ export default function Home() {
             {/* Strategic Thinking Card */}
             <div className="card group hover:-translate-y-2 animate-slide-up delay-200">
               <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto">
-                  <svg className="w-8 h-8 text-accent-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" />
-                  </svg>
+                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+                  <span className="material-symbols-rounded text-4xl text-accent-500">
+                    psychology_alt
+                  </span>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
-                    Strategic Thinking
+                    Design Thinking
                   </h3>
                   <p className="text-text-200 leading-relaxed">
-                    Leveraging insights from psychology and creative problem-solving to develop 
-                    innovative solutions that drive meaningful results.
+                    Leveraging insights from psychology, crossover creativity and design thinking to develop 
+                    innovative solutions to social challenges.
                   </p>
                 </div>
               </div>
@@ -163,24 +164,22 @@ export default function Home() {
           className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
           onClick={() => setIsContactOpen(false)}
         >
-          {/* Backdrop */}
           <div className="fixed inset-0 backdrop-blur-sm" />
-          
-          {/* Modal Content */}
           <div 
             className="relative w-full max-w-md mx-4 animate-scale-up"
             onClick={e => e.stopPropagation()}
           >
             <div className="bg-background-900/50 backdrop-blur-md rounded-xl p-8">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-text-50">Let's Connect</h3>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-rounded text-accent-500">handshake</span>
+                  <h3 className="text-2xl font-bold text-text-50">Let's Connect</h3>
+                </div>
                 <button 
                   onClick={() => setIsContactOpen(false)}
                   className="text-text-200 hover:text-text-50 transition-all duration-300"
                 >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <span className="material-symbols-rounded">close</span>
                 </button>
               </div>
               <p className="text-text-200 mb-8">
@@ -199,18 +198,13 @@ export default function Home() {
                   >
                     <div className="absolute inset-0 bg-background-800/20 backdrop-blur-sm" />
                     <div className="relative flex items-center w-full">
-                      <span className={`p-2 rounded-lg mr-4 transition-all duration-300 ${link.color}`}>
+                      <div className={`flex items-center justify-center w-10 h-10 rounded-lg mr-4 transition-all duration-300 ${link.color}`}>
                         {link.icon}
-                      </span>
+                      </div>
                       <span className="font-medium text-text-50">{link.label || link.name}</span>
-                      <svg 
-                        className="w-5 h-5 ml-auto transform transition-transform duration-300 group-hover:translate-x-1" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+                      <span className="material-symbols-rounded ml-auto transform transition-transform duration-300 group-hover:translate-x-1">
+                        arrow_forward
+                      </span>
                     </div>
                   </a>
                 ))}
@@ -226,24 +220,22 @@ export default function Home() {
           className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
           onClick={() => setIsResumeOpen(false)}
         >
-          {/* Backdrop */}
           <div className="fixed inset-0 backdrop-blur-sm" />
-          
-          {/* Modal Content */}
           <div 
             className="relative w-full max-w-md mx-4 animate-scale-up"
             onClick={e => e.stopPropagation()}
           >
             <div className="bg-background-900/50 backdrop-blur-md rounded-xl p-8">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-text-50">My Resume</h3>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-rounded text-accent-500">description</span>
+                  <h3 className="text-2xl font-bold text-text-50">My Resume</h3>
+                </div>
                 <button 
                   onClick={() => setIsResumeOpen(false)}
                   className="text-text-200 hover:text-text-50 transition-all duration-300"
                 >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <span className="material-symbols-rounded">close</span>
                 </button>
               </div>
               <p className="text-text-200 mb-8">
@@ -260,19 +252,12 @@ export default function Home() {
                   <div className="absolute inset-0 bg-background-800/20 backdrop-blur-sm" />
                   <div className="relative flex items-center w-full">
                     <span className="p-2 rounded-lg mr-4 transition-all duration-300 text-accent-500">
-                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
+                      <span className="material-symbols-rounded">download</span>
                     </span>
                     <span className="font-medium text-text-50">Download Resume</span>
-                    <svg 
-                      className="w-5 h-5 ml-auto transform transition-transform duration-300 group-hover:translate-x-1" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="material-symbols-rounded ml-auto transform transition-transform duration-300 group-hover:translate-x-1">
+                      arrow_forward
+                    </span>
                   </div>
                 </a>
               </div>
