@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import StarNetwork from "@/components/StarNetwork";
 import { Carousel } from 'react-responsive-3d-carousel';
+import BorderBeam from "@/components/BorderBeam";
+import TypingAnimation from "@/components/TypingAnimation";
 import 'react-responsive-3d-carousel/dist/styles.css';
 
 export default function Home() {
@@ -168,8 +170,8 @@ export default function Home() {
       <section className="min-h-screen flex items-center justify-center relative">
         <div className={`container relative z-10 transition-all duration-400 ease-in-out ${isContactOpen || isResumeOpen ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
           <div className="max-w-4xl mx-auto text-center space-y-12">
-            <h1 className="text-5xl md:text-6xl font-bold text-text-50 animate-slide-up tracking-tight leading-tight">
-              HI, I'M CAS BECKER	
+            <h1 className="text-5xl md:text-6xl font-bold text-text-50 tracking-tight leading-tight">
+              <TypingAnimation delay={130}>HI, I'M CAS BECKER</TypingAnimation>
             </h1>
             <p className="text-lg md:text-xl text-text-100 animate-slide-up delay-100 leading-relaxed max-w-3xl mx-auto">
               I'm an agile developer and social innovator, specializing in Mendix, Front-End Development and creative project management 
@@ -238,77 +240,83 @@ export default function Home() {
       </section> */}
 
  {/* Services Section */}
- <section className="py-32 relative">
-        <div className="container relative z-10">
-          <div className="text-center mb-24">
-            <h2 className="section-title text-text-50">What do I do?</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {/* Social Innovation Card */}
-            <div className="card group hover:-translate-y-2 animate-slide-up">
-              <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800/10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
-                  <span className="material-symbols-rounded text-4xl text-accent-400">
-                    diversity_3
-                  </span>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-semibold text-text-50 mb-3">
-                    Social Innovation
-                  </h3>
-                  <p className="text-text-100 leading-relaxed">
-                    Driving positive change through innovative solutions that address complex social challenges. 
-                    Specializing in projects that combine technology with social impact.
-                  </p>
-                </div>
-              </div>
+ <section className="py-16 sm:py-32 relative">
+  <div className="container relative z-10">
+    <div className="text-center mb-16 sm:mb-24">
+      <h2 className="section-title text-text-50">What do I do?</h2>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12 max-w-6xl mx-auto">
+      {/* Social Innovation Card */}
+      <div className="relative group">
+        <div className="card service-card animate-slide-up">
+          <div className="content-wrapper">
+            <div className="icon-wrapper">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+              <span className="material-symbols-rounded icon">
+                diversity_3
+              </span>
             </div>
-
-            {/* Development Card */}
-            <div className="card group hover:-translate-y-2 animate-slide-up delay-100">
-              <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
-                  <span className="material-symbols-rounded text-4xl text-accent-500">
-                    code_blocks
-                  </span>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-semibold text-text-50 mb-3">
-                    Development
-                  </h3>
-                  <p className="text-text-100 leading-relaxed">
-                    Expert in Mendix and front-end development, creating intuitive and scalable applications 
-                    that deliver exceptional user experiences.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Strategic Thinking Card */}
-            <div className="card group hover:-translate-y-2 animate-slide-up delay-200">
-              <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
-                  <span className="material-symbols-rounded text-4xl text-accent-500">
-                    psychology_alt
-                  </span>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-semibold text-text-50 mb-3">
-                    Design Thinking
-                  </h3>
-                  <p className="text-text-100 leading-relaxed">l
-                    Leveraging insights from psychology, crossover creativity and design thinking to develop 
-                    innovative solutions to social challenges.
-                  </p>
-                </div>
-              </div>
+            <div className="text-center">
+              <h3 className="title">
+                Social Innovation
+              </h3>
+              <p className="description">
+                Driving positive change through innovative solutions that address complex social challenges. 
+                Specializing in projects that combine technology with social impact.
+              </p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Development Card */}
+      <div className="relative group">
+        <div className="card service-card animate-slide-up delay-100">
+          <div className="content-wrapper">
+            <div className="icon-wrapper">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+              <span className="material-symbols-rounded icon">
+                code_blocks
+              </span>
+            </div>
+            <div className="text-center">
+              <h3 className="title">
+                Development
+              </h3>
+              <p className="description">
+                Expert in Mendix and front-end development, creating intuitive and scalable applications 
+                that deliver exceptional user experiences.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Strategic Thinking Card */}
+      <div className="relative group">
+        <div className="card service-card animate-slide-up delay-200">
+          <div className="content-wrapper">
+            <div className="icon-wrapper">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
+              <span className="material-symbols-rounded icon">
+                psychology_alt
+              </span>
+            </div>
+            <div className="text-center">
+              <h3 className="title">
+                Design Thinking
+              </h3>
+              <p className="description">
+                Leveraging insights from psychology, crossover creativity and design thinking to develop 
+                innovative solutions to social challenges.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Contact Modal */}
       {isContactOpen && (
