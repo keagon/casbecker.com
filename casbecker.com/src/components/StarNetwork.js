@@ -112,16 +112,19 @@ export default function StarNetwork() {
     // Initialize stars
     const initStars = () => {
       const stars = [];
-      const numStars = Math.floor((width * height) / 18000);
+      const isMobile = width <= 768; // Standard mobile breakpoint
+      const baseStarDensity = 9000;
+      const starDensity = isMobile ? baseStarDensity / 2 : baseStarDensity; // Double the stars on mobile
+      const numStars = Math.floor((width * height) / starDensity);
       
-
-
       for (let i = 0; i < numStars; i++) {
+        const baseSpeed = Math.random() * 0.03;
+        const speed = isMobile ? baseSpeed * 1.5 : baseSpeed; // 1.3x faster on mobile
         stars.push(new Star(
           Math.random() * width,
           Math.random() * height,
           Math.random() * 2 + 1.5,
-          Math.random() * 0.02
+          speed
         ));
       }
       return stars;

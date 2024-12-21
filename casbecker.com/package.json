@@ -12,7 +12,8 @@
     "@material-symbols/font-400": "^0.27.2",
     "next": "14.0.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-responsive-3d-carousel": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

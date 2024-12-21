@@ -1,24 +1,128 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StarNetwork from "@/components/StarNetwork";
+import { Carousel } from 'react-responsive-3d-carousel';
+import 'react-responsive-3d-carousel/dist/styles.css';
 
 export default function Home() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleCloseModal = (setter) => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setter(false);
+      setIsClosing(false);
+    }, 300); // Match this with the exit animation duration
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleCopyEmail = async (e) => {
     e.preventDefault();
     try {
       await navigator.clipboard.writeText('cas.interleaf@gmail.com');
       setCopiedEmail(true);
-      setTimeout(() => setCopiedEmail(false), 1300); // Reset after 2 seconds
+      setTimeout(() => setCopiedEmail(false), 1300);
     } catch (err) {
       console.error('Failed to copy email:', err);
     }
   };
+
+  const portfolioItems = [
+    {
+      title: "De Salon",
+      description: "Creatief Collectief Utrecht",
+      image: "/portfolio/project1.jpg",
+      technologies: [""],
+      link: "https://www.instagram.com/desalonutrecht/"
+    },
+    {
+      title: "Nakama",
+      description: "Een bordspel dat emotionele verbinding stimuleert",
+      image: "/portfolio/project2.jpg",
+      technologies: [""],
+      link: "https://www.instagram.com/nakamaboardgame/"
+    },
+    {
+      title: "Interleaf",
+      description: "Freelance programmeur, web designer en Mendix professional",
+      image: "/portfolio/project3.jpg",
+      technologies: [""],
+      link: "https://nl.linkedin.com/in/%F0%9F%8C%B1cas-becker-690421124/"
+    }
+  ];
+
+  const carouselItems = portfolioItems.map((item, index) => (
+    <div 
+      key={index} 
+      className="w-full max-w-2xl mx-auto px-6 py-8" 
+      style={{ 
+        boxShadow: 'none !important',
+        WebkitBoxShadow: 'none !important',
+        MozBoxShadow: 'none !important',
+        all: 'unset',
+        width: '100%',
+        maxWidth: '42rem',
+        padding: '2rem'
+      }}
+    >
+      <div className="card group h-full flex flex-col">
+        <div className="relative w-full overflow-hidden rounded-2xl mb-6">
+          <div className="w-full pt-[100%] relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent-500/20 to-transparent z-10" />
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-center absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+              priority
+            />
+          </div>
+        </div>
+        <div className="flex-1 flex flex-col p-6">
+          <h3 className="text-2xl md:text-3xl font-bold text-text-50 mb-3">
+            {item.title}
+          </h3>
+          <p className="text-text-100 mb-6 text-base md:text-lg">
+            {item.description}
+          </p>
+          <div className="mt-auto">
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-accent-400 hover:text-accent-300 transition-colors gap-2 text-base md:text-lg group"
+            >
+              View Project
+              <span className="material-symbols-rounded text-base md:text-lg transition-transform duration-300 group-hover:translate-x-1">
+                arrow_forward
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  ));
 
   const socialLinks = [
     {
@@ -27,7 +131,12 @@ export default function Home() {
       onClick: handleCopyEmail,
       icon: <span className="material-symbols-rounded text-[28px]">mail</span>,
       color: 'text-[#EA4335]',
-      label: copiedEmail ? 'Copied!' : 'cas.interleaf@gmail.com'
+      label: copiedEmail ? 'Copied!' : (
+        <>
+          <span className="hidden sm:inline">cas.interleaf@gmail.com</span>
+          <span className="sm:hidden">Email</span>
+        </>
+      )
     },
     {
       name: 'LinkedIn',
@@ -60,7 +169,7 @@ export default function Home() {
         <div className={`container relative z-10 transition-all duration-400 ease-in-out ${isContactOpen || isResumeOpen ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
           <div className="max-w-4xl mx-auto text-center space-y-12">
             <h1 className="text-5xl md:text-6xl font-bold text-text-50 animate-slide-up tracking-tight leading-tight">
-            HI, I'M CAS BECKER	
+              HI, I'M CAS BECKER	
             </h1>
             <p className="text-lg md:text-xl text-text-100 animate-slide-up delay-100 leading-relaxed max-w-3xl mx-auto">
               I'm an agile developer and social innovator, specializing in Mendix, Front-End Development and creative project management 
@@ -83,10 +192,53 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <button 
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-soft group"
+        >
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-text-100 text-sm group-hover:text-text-50 transition-colors">
+              Scroll Down
+            </span>
+            <span className="material-symbols-rounded text-3xl text-accent-400 group-hover:text-accent-300 transition-colors">
+              expand_more
+            </span>
+          </div>
+        </button>
       </section>
 
-      {/* Services Section */}
+     
+
+      {/* Portfolio Section
       <section className="py-32 relative">
+        <div className="container relative z-10">
+          <div className="text-center mb-24">
+            <h2 className="section-title text-text-50">Portfolio</h2>
+          </div>
+          <div className="max-w-6xl mx-auto">
+            <Carousel
+              items={carouselItems}
+              autoPlay={true}
+              interval={5000}
+              infiniteLoop={true}
+              showArrows={true}
+              showStatus={false}
+              showThumbs={false}
+              showIndicators={false}
+              centerMode={!isMobile}
+              centerSlidePercentage={100}
+              className="portfolio-carousel"
+              swipeable={true}
+              emulateTouch={true}
+              preventMovementUntilSwipeScrollTolerance={true}
+              swipeScrollTolerance={50}
+            />
+          </div>
+        </div>
+      </section> */}
+
+ {/* Services Section */}
+ <section className="py-32 relative">
         <div className="container relative z-10">
           <div className="text-center mb-24">
             <h2 className="section-title text-text-50">What do I do?</h2>
@@ -95,9 +247,9 @@ export default function Home() {
             {/* Social Innovation Card */}
             <div className="card group hover:-translate-y-2 animate-slide-up">
               <div className="space-y-6">
-                <div className="w-16 h-16 bg-accent-800 bg-opacity-10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
+                <div className="w-16 h-16 bg-accent-800/10 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-accent-500/10 to-transparent" />
-                  <span className="material-symbols-rounded text-4xl text-accent-500">
+                  <span className="material-symbols-rounded text-4xl text-accent-400">
                     diversity_3
                   </span>
                 </div>
@@ -105,7 +257,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
                     Social Innovation
                   </h3>
-                  <p className="text-text-200 leading-relaxed">
+                  <p className="text-text-100 leading-relaxed">
                     Driving positive change through innovative solutions that address complex social challenges. 
                     Specializing in projects that combine technology with social impact.
                   </p>
@@ -126,7 +278,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
                     Development
                   </h3>
-                  <p className="text-text-200 leading-relaxed">
+                  <p className="text-text-100 leading-relaxed">
                     Expert in Mendix and front-end development, creating intuitive and scalable applications 
                     that deliver exceptional user experiences.
                   </p>
@@ -147,7 +299,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-text-50 mb-3">
                     Design Thinking
                   </h3>
-                  <p className="text-text-200 leading-relaxed">
+                  <p className="text-text-100 leading-relaxed">l
                     Leveraging insights from psychology, crossover creativity and design thinking to develop 
                     innovative solutions to social challenges.
                   </p>
@@ -161,22 +313,22 @@ export default function Home() {
       {/* Contact Modal */}
       {isContactOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
-          onClick={() => setIsContactOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          onClick={() => handleCloseModal(setIsContactOpen)}
         >
-          <div className="fixed inset-0 backdrop-blur-sm" />
+          <div className={`modal-backdrop ${isClosing ? 'modal-backdrop-exit-active' : 'modal-backdrop-enter-active'}`} />
           <div 
-            className="relative w-full max-w-md mx-4 animate-scale-up"
+            className={`relative w-full max-w-md mx-4 ${isClosing ? 'animate-fade-out' : 'animate-scale-up'}`}
             onClick={e => e.stopPropagation()}
           >
-            <div className="bg-background-900/50 backdrop-blur-md rounded-xl p-8">
+            <div className="bg-background-900/50 backdrop-blur-sm rounded-xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-rounded text-accent-500">handshake</span>
                   <h3 className="text-2xl font-bold text-text-50">Let's Connect</h3>
                 </div>
                 <button 
-                  onClick={() => setIsContactOpen(false)}
+                  onClick={() => handleCloseModal(setIsContactOpen)}
                   className="text-text-200 hover:text-text-50 transition-all duration-300"
                 >
                   <span className="material-symbols-rounded">close</span>
@@ -217,22 +369,22 @@ export default function Home() {
       {/* Resume Modal */}
       {isResumeOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
-          onClick={() => setIsResumeOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          onClick={() => handleCloseModal(setIsResumeOpen)}
         >
-          <div className="fixed inset-0 backdrop-blur-sm" />
+          <div className={`modal-backdrop ${isClosing ? 'modal-backdrop-exit-active' : 'modal-backdrop-enter-active'}`} />
           <div 
-            className="relative w-full max-w-md mx-4 animate-scale-up"
+            className={`relative w-full max-w-md mx-4 ${isClosing ? 'animate-fade-out' : 'animate-scale-up'}`}
             onClick={e => e.stopPropagation()}
           >
-            <div className="bg-background-900/50 backdrop-blur-md rounded-xl p-8">
+            <div className="bg-background-900/50 backdrop-blur-sm rounded-xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-rounded text-accent-500">description</span>
                   <h3 className="text-2xl font-bold text-text-50">My Resume</h3>
                 </div>
                 <button 
-                  onClick={() => setIsResumeOpen(false)}
+                  onClick={() => handleCloseModal(setIsResumeOpen)}
                   className="text-text-200 hover:text-text-50 transition-all duration-300"
                 >
                   <span className="material-symbols-rounded">close</span>
@@ -245,7 +397,7 @@ export default function Home() {
                 <a
                   href="/CV-Cas-Becker-apr-2023-Development.pdf"
                   download
-                  onClick={() => setIsResumeOpen(false)}
+                  onClick={() => handleCloseModal(setIsResumeOpen)}
                   className="group relative flex items-center p-4 rounded-lg transform hover:-translate-x-1 hover:translate-y-0.5 
                            transition-all duration-300 shadow-lg overflow-hidden"
                 >
