@@ -90,7 +90,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 1rem;
   }
 
   .light {
@@ -211,7 +211,7 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium 
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium 
            transition-all duration-300 ease-out transform;
   }
 
@@ -259,11 +259,13 @@
   }
 
   .card {
-    @apply relative p-6 sm:p-8 rounded-xl bg-background-800/15 backdrop-blur-md
+    @apply relative p-4 sm:p-6 rounded-2xl
            transform
            hover:-translate-y-1
            transition-[transform,box-shadow] duration-300 ease-out
-           h-full flex flex-col;
+           h-full flex flex-col
+           md:backdrop-blur-sm
+           bg-background-700 bg-opacity-10;
 
     &:hover {
       @apply shadow-[0_8px_40px_-5px_rgb(199_118_56_/_0.25)];

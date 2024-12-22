@@ -14,6 +14,7 @@ export default function Home() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(true);
 
   const handleCloseModal = (setter) => {
     setIsClosing(true);
@@ -36,6 +37,25 @@ export default function Home() {
 
     // Cleanup
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const halfPageHeight = windowHeight / 2;
+      
+      setShowScrollButton(scrollPosition < halfPageHeight);
+    };
+
+    // Initial check
+    handleScroll();
+
+    // Add event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleCopyEmail = async (e) => {
@@ -196,7 +216,8 @@ export default function Home() {
         </div>
         <button 
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-soft group"
+          className={`absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-soft group
+                     transition-opacity duration-300 ${showScrollButton ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           <div className="flex flex-col items-center gap-1">
             <span className="text-text-100 text-sm group-hover:text-text-50 transition-colors">

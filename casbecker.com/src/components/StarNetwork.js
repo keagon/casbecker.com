@@ -141,7 +141,7 @@ export default function StarNetwork() {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
       
-      const speedMultiplier = Math.max(0.3, 1 - scrollProgressRef.current);
+      const speedMultiplier = Math.max(0.05, 1 - scrollProgressRef.current);
       const currentColor = interpolateColor(scrollProgressRef.current);
       
       // Update stars drawing
