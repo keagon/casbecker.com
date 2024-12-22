@@ -556,10 +556,6 @@
   }
 }
 
-.portfolio-carousel [class*="carousel-item"] {
-  box-shadow: none !important;
-}
-
 @layer base {
   * {
     @apply border-border;
