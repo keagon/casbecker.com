@@ -27,6 +27,8 @@ class Star {
     this.opacity = Math.random() * 0.3 + 0.7;
     this.isWrapping = false;
     this.wrappingProgress = 0;
+    this.originalX = x;
+    this.originalY = y;
   }
 
   update(width, height, speedMultiplier) {
@@ -82,7 +84,8 @@ export default function StarNetwork() {
       window.requestAnimationFrame(() => {
         const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
         const currentScroll = window.scrollY;
-        scrollProgressRef.current.value = scrollHeight > 0 ? Math.min(Math.max(currentScroll / scrollHeight, 0), 1) : 0;
+        const newValue = scrollHeight > 0 ? Math.min(Math.max(currentScroll / scrollHeight, 0), 0.99) : 0;
+        scrollProgressRef.current.value = newValue;
         scrollProgressRef.current.ticking = false;
       });
       scrollProgressRef.current.ticking = true;
@@ -180,15 +183,22 @@ export default function StarNetwork() {
     animationFrameRef.current = requestAnimationFrame(draw);
   }, [interpolateColor]);
 
+  const handleResize = useCallback(() => {
+    const dims = updateCanvasSize();
+    
+    const currentWidth = canvasRef.current?.width || 0;
+    const currentHeight = canvasRef.current?.height || 0;
+    const sizeDiff = Math.abs(dims.width - currentWidth) + Math.abs(dims.height - currentHeight);
+    
+    if (sizeDiff > 50 || starsRef.current.length === 0) {
+      starsRef.current = initStars(dims.width, dims.height);
+    }
+  }, [updateCanvasSize, initStars]);
+
   useEffect(() => {
     scrollProgressRef.current = { value: 0, ticking: false };
     const { width, height } = updateCanvasSize();
     starsRef.current = initStars(width, height);
-
-    const handleResize = () => {
-      const dims = updateCanvasSize();
-      starsRef.current = initStars(dims.width, dims.height);
-    };
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll);
@@ -201,7 +211,7 @@ export default function StarNetwork() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [updateCanvasSize, initStars, handleScroll, draw]);
+  }, [updateCanvasSize, initStars, handleScroll, draw, handleResize]);
 
   return (
     <canvas
@@ -209,7 +219,11 @@ export default function StarNetwork() {
       className="fixed inset-0 w-full h-full pointer-events-none"
       style={{ 
         backgroundColor: '#091011',
-        opacity: 1
+        opacity: 1,
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+        WebkitFontSmoothing: 'antialiased',
+        imageRendering: 'pixelated'
       }}
     />
   );

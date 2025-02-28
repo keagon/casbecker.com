@@ -22,7 +22,7 @@ export default function ServicesSection() {
                   </h3>
                   <p className="description">
                     Driving positive change through innovative solutions that address complex social challenges. 
-                    Specializing in projects that combine technology with social impact.
+                    Specializing in projects that combine technology with social impact. Like <a href="https://nakamaboardgame.com" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:text-accent-400">Nakama the boardgame</a>.
                   </p>
                 </div>
               </div>
@@ -45,7 +45,7 @@ export default function ServicesSection() {
                   </h3>
                   <p className="description">
                     Expert in Mendix and front-end development, creating intuitive and scalable applications 
-                    that deliver exceptional user experiences.
+                    that deliver exceptional user experiences. With an insight into clients derived from a background in psychology.
                   </p>
                 </div>
               </div>
@@ -68,7 +68,7 @@ export default function ServicesSection() {
                   </h3>
                   <p className="description">
                     Leveraging insights from psychology, crossover creativity and design thinking to develop 
-                    innovative solutions to social challenges.
+                    innovative solutions to social challenges. Transdisciplinary, creative, and practical.
                   </p>
                 </div>
               </div>
