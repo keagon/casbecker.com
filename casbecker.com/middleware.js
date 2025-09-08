@@ -82,6 +82,8 @@ export const config = {
     "/transvibe/(.*)",
     "/api/transvibe",
     "/api/transvibe/(.*)",
+    "/transvibe/api",
+    "/transvibe/api/(.*)",
   ],
 };
 

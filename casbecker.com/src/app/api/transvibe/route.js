@@ -12,6 +12,7 @@ import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const preferredRegion = ["iad1"]; // optional: pin to a single region if your host supports it
+export const maxDuration = 300; // allow up to 5 minutes for large files on Vercel
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
@@ -112,6 +113,29 @@ async function isAuthorized(request) {
   return false;
 }
 
+function getCorsHeaders(request) {
+  const origin = request.headers.get("origin") || "";
+  const raw = process.env.TRANSVIBE_ALLOWED_ORIGINS || "*";
+  const allowed = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  let allowOrigin = "";
+  if (allowed.includes("*")) {
+    allowOrigin = "*";
+  } else if (origin && allowed.includes(origin)) {
+    allowOrigin = origin;
+  }
+  const headers = {
+    ...(allowOrigin ? { "Access-Control-Allow-Origin": allowOrigin } : {}),
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "content-type, x-transvibe-key",
+  };
+  return headers;
+}
+
+export async function OPTIONS(request) {
+  const headers = getCorsHeaders(request);
+  return new Response(null, { status: 204, headers });
+}
+
 export async function POST(request) {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -203,11 +227,13 @@ export async function POST(request) {
     }
   });
 
+  const cors = getCorsHeaders(request);
   return new Response(stream, {
     headers: {
       "Content-Type": "application/x-ndjson; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
       "X-Accel-Buffering": "no",
+      ...cors,
     }
   });
 }
