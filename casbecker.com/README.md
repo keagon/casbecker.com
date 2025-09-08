@@ -1,5 +1,37 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Transvibe transcription API
+
+An API and test page are available to transcribe uploaded audio using OpenAI.
+
+### Setup
+
+1. Add your OpenAI API key to a local env file:
+
+```
+OPENAI_API_KEY=sk-...your-key...
+# optional: override model (default: whisper-1)
+OPENAI_TRANSCRIBE_MODEL=whisper-1
+```
+
+For Next.js app router, place this in a `.env.local` file in the project root. Restart the dev server after changes.
+
+### Usage
+
+- Test page: navigate to `/transvibe` and upload an audio file.
+- API endpoint: `POST /api/transvibe` with `multipart/form-data` field `file`.
+
+### Processing
+
+- Uploaded audio is transcoded to Opus (`.ogg`) if needed and segmented into ~10 minute chunks for stability.
+- Each chunk is transcribed with OpenAI (`whisper-1` by default).
+- Segments are merged and returned as JSON: `{ text, segments, model }`.
+
+### Notes
+
+- Requires ffmpeg; the project uses `ffmpeg-static` to bundle a binary in most environments.
+- Large files will take time and memory; consider platform limits for serverless deploys. The route declares `runtime = "nodejs"` and `dynamic = "force-dynamic"` to favor Node runtimes.
+
 ## Getting Started
 
 First, run the development server:
