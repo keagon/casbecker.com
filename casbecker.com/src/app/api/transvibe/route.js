@@ -17,16 +17,26 @@ export const maxDuration = 300; // allow up to 5 minutes for large files on Verc
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 async function writeUploadedFileToTemp(file) {
+  console.log('writeUploadedFileToTemp called with file:', {
+    type: typeof file,
+    constructor: file?.constructor?.name,
+    size: file?.size,
+    name: file?.name
+  });
+
   let buffer;
   
   try {
     // Handle standard File objects (from web browsers)
     if (typeof file.arrayBuffer === 'function') {
+      console.log('Using arrayBuffer method');
       const arrayBuffer = await file.arrayBuffer();
       buffer = Buffer.from(arrayBuffer);
+      console.log('arrayBuffer created buffer of size:', buffer.length);
     }
-    // Handle React Native FormData format (streams or text)
+    // Handle React Native FormData format (streams)
     else if (typeof file.stream === 'function') {
+      console.log('Using stream method');
       const stream = file.stream();
       const chunks = [];
       const reader = stream.getReader();
@@ -38,29 +48,73 @@ async function writeUploadedFileToTemp(file) {
       }
       
       buffer = Buffer.concat(chunks.map(chunk => Buffer.from(chunk)));
+      console.log('Stream created buffer of size:', buffer.length);
     }
-    // Fallback: try to get bytes directly if it's a Blob-like object
-    else if (file.size !== undefined) {
-      // Some implementations might have a different method
-      buffer = Buffer.from(await file.text(), 'binary');
+    // Try text method for Blob-like objects
+    else if (typeof file.text === 'function') {
+      console.log('Using text method');
+      const text = await file.text();
+      // For binary files, text() might not work well, but let's try
+      buffer = Buffer.from(text, 'binary');
+      console.log('Text method created buffer of size:', buffer.length);
+    }
+    // Handle if it's actually already a File object but we missed it
+    else if (file instanceof File || (file && file.constructor && file.constructor.name === 'File')) {
+      console.log('Detected File object, using arrayBuffer');
+      const arrayBuffer = await file.arrayBuffer();
+      buffer = Buffer.from(arrayBuffer);
+      console.log('File object created buffer of size:', buffer.length);
+    }
+    // Last resort: check if it might be a Blob
+    else if (file && typeof file === 'object' && file.size !== undefined) {
+      console.log('Attempting blob-like object handling');
+      // Try multiple approaches for blob-like objects
+      try {
+        if (file.arrayBuffer) {
+          const arrayBuffer = await file.arrayBuffer();
+          buffer = Buffer.from(arrayBuffer);
+        } else if (file.stream) {
+          const stream = file.stream();
+          const chunks = [];
+          const reader = stream.getReader();
+          
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+          }
+          
+          buffer = Buffer.concat(chunks.map(chunk => Buffer.from(chunk)));
+        }
+        console.log('Blob-like object created buffer of size:', buffer.length);
+      } catch (blobError) {
+        console.error('Blob handling failed:', blobError);
+        throw new Error(`Failed to read blob-like object: ${blobError.message}`);
+      }
     }
     else {
-      throw new Error('Unable to read file data - unsupported file object format');
+      console.error('Unsupported file object type. Available methods:', Object.getOwnPropertyNames(file || {}));
+      throw new Error(`Unable to read file data - unsupported file object format. Type: ${typeof file}, Constructor: ${file?.constructor?.name}`);
     }
   } catch (error) {
     console.error('Error reading file:', error);
+    console.error('File object details:', file);
     throw new Error(`Failed to read uploaded file: ${error.message}`);
   }
   
-  if (!buffer || buffer.length === 0) {
-    throw new Error('Uploaded file appears to be empty or corrupted');
+  if (!buffer) {
+    throw new Error('Buffer is null or undefined after file reading');
+  }
+  
+  if (buffer.length === 0) {
+    throw new Error('Uploaded file appears to be empty or corrupted - buffer has zero length');
   }
   
   const tempDir = await fsp.mkdtemp(path.join(os.tmpdir(), "transvibe-upload-"));
   const inputPath = path.join(tempDir, file.name || `upload-${Date.now()}`);
   await fsp.writeFile(inputPath, buffer);
   
-  console.log(`File written to ${inputPath}, size: ${buffer.length} bytes`);
+  console.log(`File written successfully to ${inputPath}, size: ${buffer.length} bytes`);
   return { tempDir, inputPath };
 }
 
@@ -279,9 +333,14 @@ export async function POST(request) {
           type: typeof file,
           constructor: file?.constructor?.name,
           hasArrayBuffer: typeof file?.arrayBuffer === 'function',
+          hasStream: typeof file?.stream === 'function',
+          hasText: typeof file?.text === 'function',
           size: file?.size,
           name: file?.name,
-          type: file?.type
+          fileType: file?.type,
+          keys: Object.keys(file || {}),
+          isFile: file instanceof File,
+          stringValue: typeof file === 'string' ? file : 'not a string'
         });
 
         // API accepts any audio format that FFmpeg can process
