@@ -27,26 +27,105 @@ async function writeUploadedFileToTemp(file) {
 
 async function transcodeAndSegmentToOpus(inputPath, segmentSeconds = 600) {
   const outputDir = await fsp.mkdtemp(path.join(os.tmpdir(), "transvibe-chunks-"));
-  const outputPattern = path.join(outputDir, "part-%03d.ogg");
+  
+  // Try Opus first, then fall back to MP3 if needed
+  const formats = [
+    { 
+      codec: "libopus", 
+      extension: "ogg", 
+      format: "ogg",
+      frequency: 48000,
+      bitrate: "64k"
+    },
+    { 
+      codec: "libmp3lame", 
+      extension: "mp3", 
+      format: "mp3",
+      frequency: 44100,
+      bitrate: "128k"
+    }
+  ];
 
-  await new Promise((resolve, reject) => {
-    ffmpeg(inputPath)
-      .audioCodec("libopus")
-      .audioChannels(1)
-      .audioBitrate("64k")
-      .format("ogg")
-      .outputOptions([
-        "-f segment",
-        `-segment_time ${segmentSeconds}`,
-        "-reset_timestamps 1",
-      ])
-      .on("error", (err) => reject(err))
-      .on("end", () => resolve())
-      .save(outputPattern);
-  });
+  let lastError = null;
+  let successfulFormat = null;
+  
+  for (const audioFormat of formats) {
+    const outputPattern = path.join(outputDir, `part-%03d.${audioFormat.extension}`);
+    
+    // Clean up any previous attempt files
+    try {
+      const existingFiles = await fsp.readdir(outputDir);
+      for (const file of existingFiles) {
+        await fsp.unlink(path.join(outputDir, file));
+      }
+    } catch (cleanupErr) {
+      // Ignore cleanup errors
+    }
+
+    const attemptTranscode = async (inputOptions = []) => {
+      return new Promise((resolve, reject) => {
+        const command = ffmpeg(inputPath);
+        
+        if (inputOptions.length > 0) {
+          command.inputOptions(inputOptions);
+        }
+        
+        command
+          .audioCodec(audioFormat.codec)
+          .audioChannels(1)
+          .audioBitrate(audioFormat.bitrate)
+          .audioFrequency(audioFormat.frequency)
+          .format(audioFormat.format)
+          .outputOptions([
+            "-f segment",
+            `-segment_time ${segmentSeconds}`,
+            "-reset_timestamps 1",
+            "-avoid_negative_ts make_zero"
+          ])
+          .on("error", (err) => {
+            console.error(`FFmpeg error with ${audioFormat.codec}:`, err);
+            reject(err);
+          })
+          .on("stderr", (stderrLine) => {
+            console.log("FFmpeg stderr:", stderrLine);
+          })
+          .on("end", () => resolve())
+          .save(outputPattern);
+      });
+    };
+
+    // Try multiple input strategies for each format
+    const strategies = [
+      [],  // Auto-detection
+      ["-f mp4"],  // Force mp4 demuxer
+      ["-f mov"],  // Use mov demuxer 
+      ["-analyzeduration 10000000", "-probesize 10000000"]  // Extended analysis
+    ];
+    
+    let formatSuccess = false;
+    
+    for (const strategy of strategies) {
+      try {
+        await attemptTranscode(strategy);
+        successfulFormat = audioFormat;
+        formatSuccess = true;
+        console.log(`Successfully transcoded with ${audioFormat.codec} using strategy: ${JSON.stringify(strategy)}`);
+        break;
+      } catch (err) {
+        lastError = err;
+        console.log(`${audioFormat.codec} strategy failed: ${JSON.stringify(strategy)}, trying next...`);
+      }
+    }
+    
+    if (formatSuccess) break;
+  }
+
+  if (!successfulFormat) {
+    throw lastError || new Error("All transcoding strategies failed");
+  }
 
   const files = (await fsp.readdir(outputDir))
-    .filter((n) => n.startsWith("part-") && n.endsWith(".ogg"))
+    .filter((n) => n.startsWith("part-") && n.endsWith(`.${successfulFormat.extension}`))
     .sort();
   const filePaths = files.map((n) => path.join(outputDir, n));
   return { outputDir, chunkPaths: filePaths };
@@ -156,6 +235,9 @@ export async function POST(request) {
         const language = (formData.get("language") || "auto").toString().toLowerCase();
         const languageHint = ["auto", "en", "nl"].includes(language) ? language : "auto";
 
+        // API accepts any audio format that FFmpeg can process
+        // Common formats: MP3, M4A, WAV, FLAC, AAC, OGG, WEBM
+        // Optimal input: M4A (AAC codec) for best quality/size balance
         if (!file || typeof file === "string") {
           send({ type: "error", message: "No audio file provided under field 'file'." });
           controller.close();
@@ -167,6 +249,10 @@ export async function POST(request) {
         const writeRes = await writeUploadedFileToTemp(file);
         tempDir = writeRes.tempDir;
         const inputPath = writeRes.inputPath;
+        
+        // Log file details for debugging
+        const stats = await fsp.stat(inputPath);
+        send({ type: "status", step: "analyzing", message: `File written: ${file.name || 'unknown'} (${Math.round(stats.size / 1024)}KB)`, progress: 0.08 });
 
         send({ type: "status", step: "transcoding", message: "Transcoding and segmenting to Opus", progress: 0.1 });
 
