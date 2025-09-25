@@ -17,11 +17,50 @@ export const maxDuration = 300; // allow up to 5 minutes for large files on Verc
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 async function writeUploadedFileToTemp(file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  let buffer;
+  
+  try {
+    // Handle standard File objects (from web browsers)
+    if (typeof file.arrayBuffer === 'function') {
+      const arrayBuffer = await file.arrayBuffer();
+      buffer = Buffer.from(arrayBuffer);
+    }
+    // Handle React Native FormData format (streams or text)
+    else if (typeof file.stream === 'function') {
+      const stream = file.stream();
+      const chunks = [];
+      const reader = stream.getReader();
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+      }
+      
+      buffer = Buffer.concat(chunks.map(chunk => Buffer.from(chunk)));
+    }
+    // Fallback: try to get bytes directly if it's a Blob-like object
+    else if (file.size !== undefined) {
+      // Some implementations might have a different method
+      buffer = Buffer.from(await file.text(), 'binary');
+    }
+    else {
+      throw new Error('Unable to read file data - unsupported file object format');
+    }
+  } catch (error) {
+    console.error('Error reading file:', error);
+    throw new Error(`Failed to read uploaded file: ${error.message}`);
+  }
+  
+  if (!buffer || buffer.length === 0) {
+    throw new Error('Uploaded file appears to be empty or corrupted');
+  }
+  
   const tempDir = await fsp.mkdtemp(path.join(os.tmpdir(), "transvibe-upload-"));
   const inputPath = path.join(tempDir, file.name || `upload-${Date.now()}`);
   await fsp.writeFile(inputPath, buffer);
+  
+  console.log(`File written to ${inputPath}, size: ${buffer.length} bytes`);
   return { tempDir, inputPath };
 }
 
@@ -234,6 +273,16 @@ export async function POST(request) {
         const file = formData.get("file");
         const language = (formData.get("language") || "auto").toString().toLowerCase();
         const languageHint = ["auto", "en", "nl"].includes(language) ? language : "auto";
+
+        // Debug logging to understand file object structure
+        console.log('Received file object:', {
+          type: typeof file,
+          constructor: file?.constructor?.name,
+          hasArrayBuffer: typeof file?.arrayBuffer === 'function',
+          size: file?.size,
+          name: file?.name,
+          type: file?.type
+        });
 
         // API accepts any audio format that FFmpeg can process
         // Common formats: MP3, M4A, WAV, FLAC, AAC, OGG, WEBM
