@@ -22,7 +22,7 @@ export default function ServicesSection() {
                   </h3>
                   <p className="description">
                     Driving positive change through innovative solutions that address complex social challenges. 
-                    Specializing in projects that combine technology with social impact. Like <a href="https://nakamaboardgame.com" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:text-accent-400">Nakama the boardgame</a>.
+                    Specializing in projects that combine technology with social impact. Like <a href="https://nakamaboardgame.com" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:text-accent-400">Nakama the card game</a> and <a href="https://www.desalonutrecht.com" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:text-accent-400">DeSalon</a>.
                   </p>
                 </div>
               </div>

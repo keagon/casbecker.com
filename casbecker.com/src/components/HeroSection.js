@@ -9,7 +9,7 @@ export default function HeroSection({ isContactOpen, isResumeOpen, setIsResumeOp
             <TypingAnimation delay={120}>HELLO WORLD, I'M CAS BECKER</TypingAnimation>
           </h1>
           <p className="text-lg md:text-xl text-text-100 animate-slide-up delay-100 leading-relaxed max-w-3xl mx-auto">
-            I'm an agile developer and social innovator, specializing in Mendix, Front-End Development and creative project management 
+            I'm an agile developer and social innovator, specializing in Mendix, Front-End Development and creative project management.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up delay-200">
             <button 

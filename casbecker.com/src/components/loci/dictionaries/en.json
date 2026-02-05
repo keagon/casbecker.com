@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "title": "Loci - Ethical, Community-Driven AI 🌱",
+    "description": "Loci is a movement against privacy invasion, pollution, and hierarchy. Join the 30 founding members building AI that runs on clean energy and respects your data."
+  },
+  "hero": {
+    "tagline": "Ethical, community-driven AI",
+    "taglinePart2": "powered by clean energy",
+    "openingText": "A movement against privacy invasion, pollution, and hierarchy. AI that doesn't make you feel guilty about using it.",
+    "values": {
+      "renewable": "Renewable energy",
+      "features": "Features that matter",
+      "conscious": "Conscious AI choices",
+      "data": "100% your data",
+      "community": "Community driven",
+      "opensource": "Supports open source",
+      "independent": "Independent",
+      "human": "Human-first"
+    },
+    "thirtyPeople": "We only need",
+    "thirtyPeopleCount": "30 people",
+    "thirtyPeopleEnd": "to start",
+    "movementLine": "Join the countermovement against AI giants. Make it about",
+    "movementUs": "us",
+    "movementAnd": "and",
+    "movementWorld": "the world",
+    "movementAgain": "again.",
+    "ctaJoin": "Claim your spot",
+    "ctaWaitlist": "Join the waitlist",
+    "ctaFeatures": "See what you get"
+  },
+  "counter": {
+    "title": "Founding spots",
+    "taken": "taken",
+    "total": "total",
+    "spotsLeft": "spots left!",
+    "explanation": "Small scale on purpose: tighter feedback, more human"
+  },
+  "features": {
+    "title": "What you get",
+    "realityCheck": "95% of the capability, all the features you'd need 3 subscriptions for, at the price of 1. Ethically.",
+    "noBloat": "No AI slop. Just what we actually use.",
+    "youDecide": "YOU decide!",
+    "items": {
+      "chat": {
+        "title": "Chat & Create",
+        "description": "Writing, coding, brainstorming. Guilt-free."
+      },
+      "shape": {
+        "title": "You Shape It",
+        "description": "Vote on features, influence the roadmap"
+      },
+      "search": {
+        "title": "Smart Search",
+        "description": "Web search + AI reasoning combined"
+      },
+      "canvas": {
+        "title": "Doc Canvas",
+        "description": "Iterate on documents with AI"
+      },
+      "multimodal": {
+        "title": "See Everything",
+        "description": "Images, PDFs, docs. It understands."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Simple pricing",
+    "perMonth": "/mo",
+    "foundingPrice": "Founding member price",
+    "comparison": {
+      "old": "ChatGPT + Claude + Perplexity = €60/mo",
+      "new": "All-in-one for €19/mo"
+    },
+    "badges": {
+      "energy": "Clean energy",
+      "privacy": "Privacy control",
+      "community": "Community direction"
+    },
+    "earlyStage": "Early-stage project. Expect rapid iteration & occasional rough edges. That's the fun part!",
+    "perksTitle": "Founding member perks",
+    "perks": {
+      "early": "Early access",
+      "vote": "Vote on roadmap",
+      "credits": "Name in credits",
+      "feedback": "Direct feedback channel"
+    }
+  },
+  "about": {
+    "title": "Meet the maker",
+    "role": "Social Innovator & Tech Explorer",
+    "bio1": "Director of a non-profit bringing the world closer together through play and innovation",
+    "bio2": "Spent a lifetime bridging tech and social/creative innovation",
+    "earlierWork": "Earlier work includes:",
+    "salon": "A creative collaboration and event space",
+    "game": "A game to bring people closer together",
+    "idealistic": "If this sounds idealistic: good. That's the point."
+  },
+  "signup": {
+    "title": "Claim your spot",
+    "titleWaitlist": "Join the waitlist",
+    "spotsRemaining": "Only {count} spots remaining!",
+    "allTaken": "All spots taken, but join the waitlist!",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "excites": "What excites you most?",
+      "anythingElse": "Anything else?",
+      "optional": "(optional)",
+      "placeholder": {
+        "name": "Your awesome name",
+        "email": "you@email.com",
+        "note": "Tell us what excites you..."
+      }
+    },
+    "options": {
+      "community": "Community voting",
+      "search": "Smart search",
+      "canvas": "Document canvas",
+      "multimodal": "Multimodal (images/docs)",
+      "privacy": "Privacy & control"
+    },
+    "commitment": "I'm committed to paying €19/mo at launch to support Loci",
+    "commitmentWaitlist": "I want to join the waitlist and get launch updates",
+    "submit": "Claim my spot",
+    "submitWaitlist": "Join waitlist",
+    "submitting": "Submitting...",
+    "success": {
+      "title": "You're in!",
+      "message": "We'll email you when we hit 30 and launch",
+      "messageWaitlist": "We'll email you when we launch or a spot opens up"
+    },
+    "error": {
+      "required": "Please fill in all required fields and confirm your commitment.",
+      "email": "Please enter a valid email address."
+    }
+  },
+  "faq": {
+    "title": "Questions?",
+    "items": [
+      {
+        "question": "What does community-driven mean?",
+        "answer": "You get a direct say in what Loci becomes. We run regular polls on features, priorities, and direction. Founding members have voting rights and a dedicated feedback channel. This isn't corporate lip service. With only 30 people, your voice actually shapes the product."
+      },
+      {
+        "question": "How private is it, really?",
+        "answer": "Your data stays yours. We don't train on your conversations, we don't sell your data, and we don't build profiles to serve you ads. You can delete everything at any time. We're building privacy into the architecture, not bolting it on as an afterthought."
+      },
+      {
+        "question": "What does 'runs on clean energy' mean?",
+        "answer": "We host on infrastructure powered by renewable energy sources. We also choose efficient models that deliver great results without excessive compute. We won't pretend to give you exact carbon numbers (those calculations are complex) but we're committed to minimizing environmental impact at every decision point."
+      },
+      {
+        "question": "Will it be as good as the best AI models?",
+        "answer": "Honestly? No. The absolute cutting-edge models are resource-intensive by design. But you'll get 95%+ of the practical capability for daily use. For most real tasks like writing, research, coding help, and analysis, you won't notice the difference. What you will notice is not feeling guilty about using it."
+      },
+      {
+        "question": "What am I paying for?",
+        "answer": "Access to Loci's AI tools (LLM, search, canvas, multimodal), hosted on clean energy infrastructure. You're also supporting the development of an alternative model: small-scale, community-directed, privacy-respecting AI. Your €19/month keeps this independent and free from VC pressure to extract maximum value from users."
+      }
+    ]
+  },
+  "footer": {
+    "home": "Home",
+    "privacy": "Privacy",
+    "status": "Status",
+    "contact": "Contact",
+    "builtWith": "Built with 💚 for humans and the world"
+  },
+  "language": {
+    "switch": "NL"
+  }
+}

@@ -29,7 +29,7 @@ export default function ResumeModal({ isOpen, onClose, isClosing }) {
           </p>
           <div className="grid gap-4">
             <a
-              href="/CV-Cas-Becker-apr-2023-Development.pdf"
+              href="/CV-Cas-Becker-dec-2025.pdf"
               download
               onClick={onClose}
               className="group relative flex items-center p-4 rounded-lg transform hover:-translate-x-1 hover:translate-y-0.5 

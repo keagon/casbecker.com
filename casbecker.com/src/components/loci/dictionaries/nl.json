@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "title": "Loci - Ethische, Community-Gedreven AI 🌱",
+    "description": "Loci is een beweging tegen privacy-inbreuk, vervuiling en hiërarchie. Sluit je aan bij de 30 oprichters die AI bouwen op schone energie met respect voor je data."
+  },
+  "hero": {
+    "tagline": "Ethische, community-gedreven AI",
+    "taglinePart2": "aangedreven door schone energie",
+    "openingText": "Een beweging tegen privacy-inbreuk, vervuiling en hiërarchie. AI waar je geen schuldgevoel van krijgt.",
+    "values": {
+      "renewable": "Hernieuwbare energie",
+      "features": "Features die ertoe doen",
+      "conscious": "Bewuste AI keuzes",
+      "data": "100% jouw data",
+      "community": "Community gedreven",
+      "opensource": "Supports open source",
+      "independent": "Onafhankelijk",
+      "human": "Mens-eerst"
+    },
+    "thirtyPeople": "We hebben maar",
+    "thirtyPeopleCount": "30 mensen",
+    "thirtyPeopleEnd": "nodig om te starten",
+    "movementLine": "Sluit je aan bij de tegenbeweging tegen AI-giganten. Maak het weer over",
+    "movementUs": "ons",
+    "movementAnd": "en",
+    "movementWorld": "de wereld",
+    "movementAgain": ".",
+    "ctaJoin": "Claim je plek",
+    "ctaWaitlist": "Naar de wachtlijst",
+    "ctaFeatures": "Bekijk wat je krijgt"
+  },
+  "counter": {
+    "title": "Oprichtersplekken",
+    "taken": "bezet",
+    "total": "totaal",
+    "spotsLeft": "plekken over!",
+    "explanation": "Klein met opzet: betere feedback, menselijker"
+  },
+  "features": {
+    "title": "Wat je krijgt",
+    "realityCheck": "95% van de mogelijkheden, alle features waarvoor je normaal 3 abonnementen nodig hebt, voor de prijs van 1. Ethisch.",
+    "noBloat": "Geen AI-rommel. Alleen wat we echt gebruiken.",
+    "youDecide": "JIJ beslist!",
+    "items": {
+      "chat": {
+        "title": "Chat & Creëer",
+        "description": "Schrijven, coderen, brainstormen. Zonder schuldgevoel."
+      },
+      "shape": {
+        "title": "Jij bepaalt mee",
+        "description": "Stem op features, bepaal de roadmap"
+      },
+      "search": {
+        "title": "Slim Zoeken",
+        "description": "Webzoeken + AI-redenering gecombineerd"
+      },
+      "canvas": {
+        "title": "Doc Canvas",
+        "description": "Itereer op documenten met AI"
+      },
+      "multimodal": {
+        "title": "Ziet Alles",
+        "description": "Afbeeldingen, PDFs, docs. Het begrijpt alles."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Simpele prijzen",
+    "perMonth": "/maand",
+    "foundingPrice": "Oprichtersprijs",
+    "comparison": {
+      "old": "ChatGPT + Claude + Perplexity = €60/maand",
+      "new": "Alles-in-één voor €19/maand"
+    },
+    "badges": {
+      "energy": "Schone energie",
+      "privacy": "Privacy controle",
+      "community": "Community richting"
+    },
+    "earlyStage": "Early-stage project. Verwacht snelle iteratie & af en toe ruwe randjes. Dat is juist het leuke!",
+    "perksTitle": "Oprichtersvoordelen",
+    "perks": {
+      "early": "Vroege toegang",
+      "vote": "Stem op roadmap",
+      "credits": "Naam in credits",
+      "feedback": "Direct feedbackkanaal"
+    }
+  },
+  "about": {
+    "title": "Ontmoet de maker",
+    "role": "Sociaal Innovator & Tech Verkenner",
+    "bio1": "Directeur van een non-profit die de wereld dichterbij brengt door spel en innovatie",
+    "bio2": "Een leven lang bruggen bouwen tussen tech en sociale/creatieve innovatie",
+    "earlierWork": "Eerder werk:",
+    "salon": "Een creatieve samenwerk- en evenementenruimte",
+    "game": "Een spel om mensen dichter bij elkaar te brengen",
+    "idealistic": "Als dit idealistisch klinkt: goed. Dat is het punt."
+  },
+  "signup": {
+    "title": "Claim je plek",
+    "titleWaitlist": "Naar de wachtlijst",
+    "spotsRemaining": "Nog maar {count} plekken!",
+    "allTaken": "Alle plekken bezet, maar join de wachtlijst!",
+    "fields": {
+      "name": "Naam",
+      "email": "E-mail",
+      "excites": "Wat enthousiasmeert je het meest?",
+      "anythingElse": "Nog iets anders?",
+      "optional": "(optioneel)",
+      "placeholder": {
+        "name": "Je geweldige naam",
+        "email": "jij@email.com",
+        "note": "Vertel ons wat je enthousiast maakt..."
+      }
+    },
+    "options": {
+      "community": "Community stemmen",
+      "search": "Slim zoeken",
+      "canvas": "Document canvas",
+      "multimodal": "Multimodaal (afbeeldingen/docs)",
+      "privacy": "Privacy & controle"
+    },
+    "commitment": "Ik ben bereid €19/maand te betalen bij lancering om Loci te steunen",
+    "commitmentWaitlist": "Ik wil op de wachtlijst en updates ontvangen",
+    "submit": "Claim mijn plek",
+    "submitWaitlist": "Naar wachtlijst",
+    "submitting": "Verzenden...",
+    "success": {
+      "title": "Je bent erbij!",
+      "message": "We mailen je zodra we 30 hebben en lanceren",
+      "messageWaitlist": "We mailen je bij lancering of als er een plek vrijkomt"
+    },
+    "error": {
+      "required": "Vul alle verplichte velden in en bevestig je commitment.",
+      "email": "Vul een geldig e-mailadres in."
+    }
+  },
+  "faq": {
+    "title": "Vragen?",
+    "items": [
+      {
+        "question": "Wat betekent community-gedreven?",
+        "answer": "Je hebt directe invloed op wat Loci wordt. We houden regelmatig polls over features, prioriteiten en richting. Oprichters hebben stemrecht en een dedicated feedbackkanaal. Dit is geen corporate praatje. Met maar 30 mensen bepaalt jouw stem echt mee."
+      },
+      {
+        "question": "Hoe privé is het, echt?",
+        "answer": "Je data blijft van jou. We trainen niet op je gesprekken, verkopen je data niet, en bouwen geen profielen om je advertenties te tonen. Je kunt alles altijd verwijderen. We bouwen privacy in de architectuur, niet als nagedachte."
+      },
+      {
+        "question": "Wat betekent 'draait op schone energie'?",
+        "answer": "We hosten op infrastructuur die draait op hernieuwbare energie. We kiezen ook voor efficiënte modellen die goede resultaten leveren zonder extreme compute. We doen niet alsof we exacte CO2-getallen hebben (die berekeningen zijn complex) maar we zijn committed aan het minimaliseren van milieu-impact bij elke beslissing."
+      },
+      {
+        "question": "Wordt het zo goed als de beste AI-modellen?",
+        "answer": "Eerlijk? Nee. De absolute cutting-edge modellen zijn by design resource-intensief. Maar je krijgt 95%+ van de praktische mogelijkheden voor dagelijks gebruik. Voor de meeste taken zoals schrijven, onderzoek, code-hulp en analyse merk je het verschil niet. Wat je wél merkt is dat je geen schuldgevoel hebt bij gebruik."
+      },
+      {
+        "question": "Waar betaal ik voor?",
+        "answer": "Toegang tot Loci's AI-tools (LLM, zoeken, canvas, multimodaal), gehost op schone energie-infrastructuur. Je steunt ook de ontwikkeling van een alternatief model: kleinschalig, community-gestuurd, privacy-respecterend AI. Je €19/maand houdt dit onafhankelijk en vrij van VC-druk om maximale waarde uit gebruikers te halen."
+      }
+    ]
+  },
+  "footer": {
+    "home": "Home",
+    "privacy": "Privacy",
+    "status": "Status",
+    "contact": "Contact",
+    "builtWith": "Gebouwd met 💚 voor  en de wereld"
+  },
+  "language": {
+    "switch": "EN"
+  }
+}
