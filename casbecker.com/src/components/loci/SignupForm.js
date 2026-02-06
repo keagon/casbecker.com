@@ -149,10 +149,12 @@ Timestamp: ${timestamp}
   
   return (
     <section id="signup" className="px-4 py-16 sm:py-24 relative">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-100/30 to-transparent" />
-      <div className="absolute top-1/4 right-0 w-64 h-64 bg-orange-200/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-emerald-200/30 rounded-full blur-3xl" />
+      {/* Background - contained */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-100/30 to-transparent" />
+        <div className="absolute top-1/4 right-0 w-64 h-64 bg-orange-200/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-emerald-200/30 rounded-full blur-3xl" />
+      </div>
       
       <div className="max-w-xl mx-auto relative z-10">
         <div className="text-center mb-8">

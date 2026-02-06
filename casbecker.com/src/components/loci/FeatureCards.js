@@ -9,40 +9,42 @@ export default function FeatureCards() {
     {
       ...t.features.items.chat,
       emoji: '💬',
-      gradient: 'from-blue-100 to-cyan-100',
-      border: 'hover:border-cyan-300',
+      gradient: 'from-emerald-50 to-teal-50',
+      border: 'hover:border-emerald-300',
     },
     {
       ...t.features.items.shape,
       emoji: '🗳️',
-      gradient: 'from-orange-100 to-amber-100',
+      gradient: 'from-orange-50 to-amber-50',
       border: 'hover:border-orange-300',
     },
     {
       ...t.features.items.search,
       emoji: '🔍',
-      gradient: 'from-purple-100 to-pink-100',
-      border: 'hover:border-purple-300',
+      gradient: 'from-emerald-50 to-cyan-50',
+      border: 'hover:border-emerald-400',
     },
     {
       ...t.features.items.canvas,
       emoji: '📝',
-      gradient: 'from-emerald-100 to-teal-100',
-      border: 'hover:border-emerald-300',
+      gradient: 'from-orange-50 to-yellow-50',
+      border: 'hover:border-orange-400',
     },
     {
       ...t.features.items.multimodal,
       emoji: '👁️',
-      gradient: 'from-rose-100 to-orange-100',
-      border: 'hover:border-rose-300',
+      gradient: 'from-emerald-50 to-orange-50',
+      border: 'hover:border-emerald-300',
     },
   ];
 
   return (
     <section id="features" className="px-4 py-16 sm:py-24 relative">
-      {/* Background elements */}
-      <div className="absolute top-1/4 left-0 w-80 h-80 bg-emerald-200/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-orange-200/30 rounded-full blur-3xl" />
+      {/* Background elements - contained to prevent overflow issues */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-80 h-80 bg-emerald-200/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-orange-200/30 rounded-full blur-3xl" />
+      </div>
       
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section header */}
@@ -69,15 +71,17 @@ export default function FeatureCards() {
               className={`group relative backdrop-blur-xl bg-white/70 border border-slate-200 rounded-3xl p-6 
                          ${feature.border}
                          hover:-translate-y-2 hover:shadow-xl hover:shadow-slate-900/10
-                         transition-all duration-300 overflow-hidden`}
+                         transition-all duration-300`}
             >
-              {/* Gradient background on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+              {/* Gradient background on hover - clipped independently */}
+              <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+              </div>
               
               <div className="relative z-10">
-                <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                <span className="text-5xl mb-4 inline-block origin-center group-hover:scale-110 transition-transform duration-300">
                   {feature.emoji}
-                </div>
+                </span>
                 <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors">
                   {feature.title}
                 </h3>

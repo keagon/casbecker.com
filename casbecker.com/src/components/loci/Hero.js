@@ -18,17 +18,22 @@ export default function Hero({ spotsRemaining, totalSpots, spotsTaken }) {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 py-16 sm:py-24 overflow-hidden">
-      {/* Animated background blobs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300/30 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-300/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-emerald-200/20 to-orange-200/20 rounded-full blur-3xl" />
+    <section className="relative min-h-screen flex items-center justify-center px-4 py-16 sm:py-24">
+      {/* Animated background blobs - positioned behind content */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-300/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-emerald-200/20 to-orange-200/20 rounded-full blur-3xl" />
+      </div>
+      
+      {/* Floating emoji decorations - visible and not clipped */}
+      <div className="hidden sm:block absolute inset-0 pointer-events-none z-20">
+        <div className="absolute top-24 left-[5%] text-4xl animate-bounce opacity-80" style={{ animationDuration: '3s' }}>🌱</div>
+        <div className="absolute top-40 right-[5%] text-3xl animate-bounce opacity-80" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }}>✨</div>
+        <div className="absolute bottom-32 left-[8%] text-3xl animate-bounce opacity-80" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>🔒</div>
+      </div>
       
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        {/* Floating emoji decorations */}
-        <div className="absolute top-0 left-8 sm:left-4 text-4xl animate-bounce" style={{ animationDuration: '3s' }}>🌱</div>
-        <div className="absolute top-20 right-8 sm:right-4 text-3xl animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }}>✨</div>
-        <div className="absolute bottom-40 left-8 sm:left-4 text-3xl animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>🔒</div>
         
         {/* Title with gradient */}
         <h1 className="text-7xl sm:text-8xl md:text-9xl font-bold mb-4 tracking-tight bg-gradient-to-r from-emerald-600 via-emerald-500 to-orange-500 bg-clip-text text-transparent">

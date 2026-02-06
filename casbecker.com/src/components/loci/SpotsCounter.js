@@ -13,10 +13,12 @@ export default function SpotsCounter({ spotsTaken, totalSpots }) {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-100/30 to-transparent" />
       
       <div className="max-w-xl mx-auto relative">
-        <div className="backdrop-blur-xl bg-white/70 border border-white/80 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5 overflow-hidden">
-          {/* Decorative gradient */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-orange-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-200/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="backdrop-blur-xl bg-white/70 border border-white/80 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-900/5 overflow-hidden relative">
+          {/* Decorative gradient - behind content */}
+          <div className="absolute inset-0 overflow-visible pointer-events-none -z-10">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-orange-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-200/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          </div>
           
           <div className="relative z-10">
             {/* Header with emoji */}

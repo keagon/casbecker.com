@@ -8,8 +8,10 @@ export default function AboutCas() {
   
   return (
     <section id="about" className="px-4 py-16 sm:py-24 relative">
-      {/* Background accent */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl" />
+      {/* Background accent - contained */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl" />
+      </div>
       
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="text-center mb-8">
@@ -19,9 +21,11 @@ export default function AboutCas() {
           </h2>
         </div>
         
-        <div className="backdrop-blur-xl bg-white/70 border border-white/80 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-900/5 overflow-hidden">
-          {/* Decorative gradient */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-orange-200/40 rounded-full blur-3xl" />
+        <div className="backdrop-blur-xl bg-white/70 border border-white/80 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-900/5 overflow-hidden relative">
+          {/* Decorative gradient - properly positioned */}
+          <div className="absolute inset-0 overflow-visible pointer-events-none">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-200/40 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+          </div>
           
           <div className="relative z-10">
             {/* Avatar + info */}

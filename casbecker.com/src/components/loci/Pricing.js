@@ -27,9 +27,11 @@ export default function Pricing() {
         
         {/* Pricing card */}
         <div className="relative backdrop-blur-xl bg-white/70 border border-white/80 rounded-[2rem] p-8 sm:p-12 shadow-xl shadow-slate-900/5 overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-200/40 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-48 h-48 bg-orange-200/40 rounded-full blur-3xl translate-x-1/4 translate-y-1/4" />
+          {/* Decorative elements - behind content */}
+          <div className="absolute inset-0 overflow-visible pointer-events-none">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-200/40 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-0 w-48 h-48 bg-orange-200/40 rounded-full blur-3xl translate-x-1/4 translate-y-1/4" />
+          </div>
           
           <div className="relative z-10">
             {/* Price display */}
