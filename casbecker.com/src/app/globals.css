@@ -301,14 +301,7 @@
 
   .portfolio-stage--dragging {
     touch-action: none;
-  }
-
-  .portfolio-stage--dragging {
     cursor: grabbing;
-  }
-
-  .portfolio-slide {
-    cursor: pointer;
   }
 
   .portfolio-stage--dragging .portfolio-slide {
@@ -320,13 +313,14 @@
     transform-style: preserve-3d;
   }
 
+  /* Transforms are painted via JS each frame — no CSS transition (that caused the glitch) */
   .portfolio-slide {
     @apply absolute left-1/2 top-1/2;
     width: min(720px, 88vw);
+    cursor: pointer;
     will-change: transform, opacity;
-    transition:
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    backface-visibility: hidden;
+    contain: layout style;
   }
 
   @media (min-width: 1280px) {
@@ -335,8 +329,23 @@
     }
   }
 
-  .portfolio-stage--dragging .portfolio-slide {
-    transition: none;
+  /* Idle float on the card — keeps JS slide transforms free of CSS fights */
+  .portfolio-slide--active .portfolio-card {
+    animation: portfolioFloat 4.5s ease-in-out infinite;
+  }
+
+  .portfolio-stage--dragging .portfolio-slide--active .portfolio-card {
+    animation: none;
+  }
+
+  @keyframes portfolioFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
   }
 
   /* Edge fades — subtle, so stacked peeks stay visible */
@@ -361,7 +370,7 @@
 
   .portfolio-card__glow {
     @apply pointer-events-none absolute -inset-4 rounded-[2rem] opacity-0
-           transition-opacity duration-700 ease-out -z-10;
+           transition-opacity duration-500 ease-out -z-10;
     background: radial-gradient(
       60% 50% at 50% 60%,
       rgb(var(--accent-500-rgb) / 0.28),
@@ -370,17 +379,26 @@
     filter: blur(24px);
   }
 
-  .portfolio-card--active .portfolio-card__glow {
+  .portfolio-slide--active .portfolio-card__glow {
     @apply opacity-70;
   }
 
   .portfolio-card__panel {
     @apply relative h-full w-full overflow-hidden rounded-2xl
            border border-white/15
-           bg-background-900/85
-           transition-[border-color,box-shadow,background-color,transform] duration-500 ease-out;
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-    backdrop-filter: blur(18px) saturate(1.2);
+           bg-background-900
+           transition-[border-color,box-shadow] duration-300 ease-out;
+  }
+
+  /* Blur only on the active card — 5× backdrop-filter during 3D motion is expensive */
+  .portfolio-slide--active .portfolio-card__panel {
+    -webkit-backdrop-filter: blur(12px) saturate(1.15);
+    backdrop-filter: blur(12px) saturate(1.15);
+    @apply border-white/25;
+    box-shadow:
+      0 24px 60px -12px rgb(0 0 0 / 0.65),
+      0 0 40px -8px rgb(var(--accent-500-rgb) / 0.3),
+      inset 0 1px 0 rgb(255 255 255 / 0.15);
   }
 
   /* Thin top edge highlight only */
@@ -388,14 +406,6 @@
     content: '';
     @apply pointer-events-none absolute inset-x-0 top-0 z-[2] h-px
            bg-gradient-to-r from-transparent via-white/40 to-transparent;
-  }
-
-  .portfolio-card--active .portfolio-card__panel {
-    @apply border-white/25 bg-background-900;
-    box-shadow:
-      0 24px 60px -12px rgb(0 0 0 / 0.65),
-      0 0 40px -8px rgb(var(--accent-500-rgb) / 0.3),
-      inset 0 1px 0 rgb(255 255 255 / 0.15);
   }
 
   /* Browser chrome */
@@ -424,7 +434,7 @@
            transition-[background-color,color] duration-300 ease-out;
   }
 
-  .portfolio-card--active .portfolio-card__panel:hover .portfolio-card__url {
+  .portfolio-slide--active .portfolio-card__panel:hover .portfolio-card__url {
     @apply bg-white/[0.12] text-text-100;
   }
 
@@ -441,16 +451,16 @@
 
   .portfolio-card__image img {
     @apply object-cover object-top w-full h-full
-           transition-transform duration-700 ease-out;
+           transition-transform duration-500 ease-out;
   }
 
-  .portfolio-card--active .portfolio-card__panel:hover .portfolio-card__image img {
+  .portfolio-slide--active .portfolio-card__panel:hover .portfolio-card__image img {
     @apply scale-105;
   }
 
   .portfolio-card__visit {
     @apply absolute inset-0 flex items-center justify-center gap-2
-           bg-background-950/55 backdrop-blur-[3px]
+           bg-background-950/55
            text-text-50 text-sm font-medium
            opacity-0 transition-[opacity,transform] duration-300 ease-out
            translate-y-1;
@@ -460,11 +470,11 @@
     @apply text-accent-400 transition-transform duration-300 ease-out;
   }
 
-  .portfolio-card--active .portfolio-card__panel:hover .portfolio-card__visit {
+  .portfolio-slide--active .portfolio-card__panel:hover .portfolio-card__visit {
     @apply opacity-100 translate-y-0;
   }
 
-  .portfolio-card--active .portfolio-card__panel:hover .portfolio-card__visit .material-symbols-rounded {
+  .portfolio-slide--active .portfolio-card__panel:hover .portfolio-card__visit .material-symbols-rounded {
     @apply scale-110;
   }
 
@@ -483,7 +493,7 @@
            transition-colors duration-300 ease-out;
   }
 
-  .portfolio-card--active .portfolio-card__panel:hover .portfolio-card__title {
+  .portfolio-slide--active .portfolio-card__panel:hover .portfolio-card__title {
     @apply text-accent-200;
   }
 
