@@ -134,8 +134,11 @@ export default function StarNetwork() {
     const { width, height } = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, width, height);
     
-    const speedMultiplier = Math.max(0.05, 1 - scrollProgressRef.current.value);
-    const currentColor = interpolateColor(scrollProgressRef.current.value);
+    // Keep motion strong near the top; ease off exponentially toward the bottom
+    // (1 - p^k with k>1 stays high early, then drops faster as p → 1)
+    const p = scrollProgressRef.current.value;
+    const speedMultiplier = Math.max(0.05, 1 - Math.pow(p, 2.75));
+    const currentColor = interpolateColor(p);
     
     starsRef.current.forEach(star => {
       star.update(width, height, speedMultiplier);
@@ -216,7 +219,7 @@ export default function StarNetwork() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none"
+      className="fixed inset-0 z-0 w-full h-full pointer-events-none"
       style={{ 
         backgroundColor: '#091011',
         opacity: 1,

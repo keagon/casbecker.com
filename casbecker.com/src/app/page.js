@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import StarNetwork from "@/components/StarNetwork";
 import HeroSection from "@/components/HeroSection";
+import PortfolioSection from "@/components/PortfolioSection";
 import ServicesSection from "@/components/ServicesSection";
 import ContactModal from "@/components/ContactModal";
 import ResumeModal from "@/components/ResumeModal";
@@ -53,6 +54,8 @@ export default function Home() {
       />
 
       <ServicesSection />
+
+      <PortfolioSection />
 
       <ContactModal 
         isOpen={isContactOpen}

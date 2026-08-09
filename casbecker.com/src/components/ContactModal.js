@@ -62,11 +62,11 @@ export default function ContactModal({ isOpen, onClose, isClosing }) {
         className={`relative w-full max-w-md mx-4 ${isClosing ? 'animate-fade-out' : 'animate-scale-up'}`}
         onClick={e => e.stopPropagation()}
       >
-        <div className="bg-background-900/50 backdrop-blur-sm rounded-xl p-8">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-rounded text-accent-500">handshake</span>
-              <h3 className="text-2xl font-bold text-text-50">Let's Connect</h3>
+        <div className="bg-background-900/50 backdrop-blur-sm rounded-xl p-5 sm:p-8 max-h-[85svh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-5 sm:mb-6 gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="material-symbols-rounded text-accent-500 shrink-0">handshake</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-text-50 truncate">Let's Connect</h3>
             </div>
             <button 
               onClick={onClose}
