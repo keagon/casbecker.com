@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 class Point {
   constructor(x, y) {
@@ -65,8 +65,11 @@ export default function StarNetwork() {
   const canvasRef = useRef(null);
   const starsRef = useRef([]);
   const animationFrameRef = useRef();
-  const scrollProgressRef = useRef(0);
+  const scrollProgressRef = useRef({ value: 0, ticking: false });
   const contextRef = useRef(null);
+  // Logical CSS dimensions used for simulation — locked against mobile URL-bar resizes
+  const dimensionsRef = useRef({ width: 0, height: 0 });
+  const resizeTimerRef = useRef(null);
 
   const interpolateColor = useCallback((progress) => {
     const r1 = 199, g1 = 118, b1 = 56;  // accent color
@@ -81,6 +84,7 @@ export default function StarNetwork() {
 
   const handleScroll = useCallback(() => {
     if (!scrollProgressRef.current.ticking) {
+      scrollProgressRef.current.ticking = true;
       window.requestAnimationFrame(() => {
         const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
         const currentScroll = window.scrollY;
@@ -88,7 +92,6 @@ export default function StarNetwork() {
         scrollProgressRef.current.value = newValue;
         scrollProgressRef.current.ticking = false;
       });
-      scrollProgressRef.current.ticking = true;
     }
   }, []);
 
@@ -110,20 +113,23 @@ export default function StarNetwork() {
     });
   }, []);
 
-  const updateCanvasSize = useCallback(() => {
+  const applyCanvasSize = useCallback((width, height) => {
     const canvas = canvasRef.current;
-    if (!canvas) return { width: 0, height: 0 };
+    if (!canvas || width <= 0 || height <= 0) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-    contextRef.current = ctx;
-    
-    return { width: rect.width, height: rect.height };
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const nextW = Math.round(width * dpr);
+    const nextH = Math.round(height * dpr);
+
+    if (canvas.width !== nextW || canvas.height !== nextH) {
+      canvas.width = nextW;
+      canvas.height = nextH;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      contextRef.current = ctx;
+    }
+
+    dimensionsRef.current = { width, height };
   }, []);
 
   const draw = useCallback(() => {
@@ -131,7 +137,12 @@ export default function StarNetwork() {
     const ctx = contextRef.current;
     if (!canvas || !ctx) return;
 
-    const { width, height } = canvas.getBoundingClientRect();
+    const { width, height } = dimensionsRef.current;
+    if (width <= 0 || height <= 0) {
+      animationFrameRef.current = requestAnimationFrame(draw);
+      return;
+    }
+
     ctx.clearRect(0, 0, width, height);
     
     // Keep motion strong near the top; ease off exponentially toward the bottom
@@ -186,35 +197,55 @@ export default function StarNetwork() {
     animationFrameRef.current = requestAnimationFrame(draw);
   }, [interpolateColor]);
 
+  // Mobile browsers fire resize when the URL bar shows/hides on scroll.
+  // Those are height-only, modest changes — ignore them so the field doesn't jump.
+  const isMobileChromeResize = useCallback((prev, nextWidth, nextHeight) => {
+    if (prev.width === 0 || prev.height === 0) return false;
+    const widthDelta = Math.abs(nextWidth - prev.width);
+    const heightDelta = Math.abs(nextHeight - prev.height);
+    return widthDelta < 10 && heightDelta > 0 && heightDelta < Math.max(150, prev.height * 0.3);
+  }, []);
+
   const handleResize = useCallback(() => {
-    const dims = updateCanvasSize();
-    
-    const currentWidth = canvasRef.current?.width || 0;
-    const currentHeight = canvasRef.current?.height || 0;
-    const sizeDiff = Math.abs(dims.width - currentWidth) + Math.abs(dims.height - currentHeight);
-    
-    if (sizeDiff > 50 || starsRef.current.length === 0) {
-      starsRef.current = initStars(dims.width, dims.height);
-    }
-  }, [updateCanvasSize, initStars]);
+    if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+    resizeTimerRef.current = setTimeout(() => {
+      const prev = dimensionsRef.current;
+      const nextWidth = window.innerWidth;
+      const nextHeight = window.innerHeight;
+
+      if (isMobileChromeResize(prev, nextWidth, nextHeight)) return;
+
+      const widthDelta = Math.abs(nextWidth - prev.width);
+      const heightDelta = Math.abs(nextHeight - prev.height);
+      applyCanvasSize(nextWidth, nextHeight);
+
+      // Reinit only on real layout changes (orientation / desktop window resize)
+      if (starsRef.current.length === 0 || widthDelta > 50 || heightDelta > 50) {
+        starsRef.current = initStars(nextWidth, nextHeight);
+      }
+    }, 150);
+  }, [applyCanvasSize, initStars, isMobileChromeResize]);
 
   useEffect(() => {
     scrollProgressRef.current = { value: 0, ticking: false };
-    const { width, height } = updateCanvasSize();
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    applyCanvasSize(width, height);
     starsRef.current = initStars(width, height);
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     draw();
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [updateCanvasSize, initStars, handleScroll, draw, handleResize]);
+  }, [applyCanvasSize, initStars, handleScroll, draw, handleResize]);
 
   return (
     <canvas

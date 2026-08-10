@@ -8,13 +8,13 @@ const projects = [
     title: "Dinner Plants",
     url: "https://dinnerplants.nl",
     image: "/portfolio/dinnerplants.jpg",
-    tagline: "Plant-based catering & events",
+    tagline: "Plant-based dinners in your neighbourhood",
   },
   {
     title: "DeSalon Utrecht",
     url: "https://desalonutrecht.com",
     image: "/portfolio/desalonutrecht.jpg",
-    tagline: "Creative workspace & event venue",
+    tagline: "Creative collective & events",
   },
   {
     title: "Nakama",
@@ -32,7 +32,7 @@ const projects = [
     title: "Hildebolt",
     url: "https://hildebolt.nl",
     image: "/portfolio/hildebolt.jpg",
-    tagline: "Craft & design studio",
+    tagline: "Speaker, host & trauma expert",
   },
 ];
 
