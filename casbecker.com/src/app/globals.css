@@ -294,7 +294,6 @@
   .portfolio-stage {
     @apply relative select-none outline-none;
     height: clamp(400px, 46vw, 640px);
-    perspective: 1800px;
     touch-action: pan-y pinch-zoom;
     cursor: grab;
   }
@@ -310,17 +309,18 @@
 
   .portfolio-track {
     @apply absolute inset-0;
-    transform-style: preserve-3d;
+    perspective: 1800px;
+    isolation: isolate;
   }
 
-  /* Transforms are painted via JS each frame — no CSS transition (that caused the glitch) */
+  /* Each slide is its own flattened layer — z-index, not 3D intersection, picks the front card */
   .portfolio-slide {
     @apply absolute left-1/2 top-1/2;
     width: min(720px, 88vw);
     cursor: pointer;
     will-change: transform, opacity;
     backface-visibility: hidden;
-    contain: layout style;
+    transform-style: flat;
   }
 
   @media (min-width: 1280px) {

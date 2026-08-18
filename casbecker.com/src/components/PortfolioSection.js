@@ -44,6 +44,12 @@ function mod(n, m) {
   return ((n % m) + m) % m;
 }
 
+/** Signed distance from `position` to index `i`, wrapped into [-count/2, count/2). */
+function ringOffset(i, position, count) {
+  const offset = i - position;
+  return offset - count * Math.floor((offset + count / 2) / count);
+}
+
 function BrowserChrome({ url }) {
   const displayUrl = url.replace(/^https?:\/\//, "");
   return (
@@ -101,8 +107,10 @@ export default function PortfolioSection() {
   const stageRef = useRef(null);
   const slideRefs = useRef([]);
   const posRef = useRef(0);
+  const targetRef = useRef(0);
   const activeRef = useRef(0);
   const stageWRef = useRef(1200);
+  const wheelingRef = useRef(false);
   const drag = useRef({ active: false, startX: 0, lastX: 0, lastT: 0, velocity: 0, moved: 0 });
   const animRef = useRef(null);
 
@@ -115,18 +123,18 @@ export default function PortfolioSection() {
       const el = slideRefs.current[i];
       if (!el) continue;
 
-      let offset = i - position;
-      offset -= Math.round(offset / count) * count;
+      const offset = ringOffset(i, position, count);
       const abs = Math.abs(offset);
-      const t = Math.min(abs, 2);
-      const isActive = abs < 0.5;
+      const depth = Math.min(abs, 2);
+      const isActive = i === nextActive;
 
-      el.style.transform = `translate(-50%, -50%) translate3d(${offset * stepX}px, 0, ${-t * 140}px) rotateY(${offset * -36}deg) scale(${1 - t * 0.1})`;
-      el.style.opacity = String(1 - Math.min(t * 0.16, 0.35));
-      el.style.zIndex = String(30 - Math.round(abs * 8));
-      el.style.pointerEvents = abs > 1.5 ? "none" : "auto";
+      el.style.transform = `translate(-50%, -50%) translateX(${offset * stepX}px) rotateY(${offset * -26}deg) scale(${1 - depth * 0.08})`;
+      el.style.opacity = String(1 - Math.min(depth * 0.18, 0.4));
+      // Active always wins. Others rank by distance; a left/right bit breaks ties.
+      el.style.zIndex = isActive ? "50" : String(Math.round(40 - abs * 10) + (offset < 0 ? 1 : 0));
+      el.style.pointerEvents = abs > 1.25 ? "none" : "auto";
       el.classList.toggle("portfolio-slide--active", isActive);
-      el.setAttribute("aria-hidden", String(!isActive && abs > 1));
+      el.setAttribute("aria-hidden", String(!isActive));
     }
 
     if (activeRef.current !== nextActive) {
@@ -148,13 +156,15 @@ export default function PortfolioSection() {
     animRef.current = null;
   };
 
-  // Snappy ease settle — no spring overshoot fighting the layout
   const settleTo = useCallback(
     (target) => {
       stopAnim();
+      targetRef.current = target;
       const from = posRef.current;
       if (Math.abs(from - target) < 0.001) {
-        setPos(mod(target, count));
+        const wrapped = mod(target, count);
+        targetRef.current = wrapped;
+        setPos(wrapped);
         return;
       }
       animRef.current = animate(from, target, {
@@ -162,7 +172,9 @@ export default function PortfolioSection() {
         ease: [0.22, 1, 0.36, 1],
         onUpdate: setPos,
         onComplete: () => {
-          setPos(mod(target, count));
+          const wrapped = mod(target, count);
+          targetRef.current = wrapped;
+          setPos(wrapped);
           animRef.current = null;
         },
       });
@@ -172,18 +184,17 @@ export default function PortfolioSection() {
 
   const goTo = useCallback(
     (i) => {
-      const current = posRef.current;
-      const base = Math.round(current);
+      const base = mod(targetRef.current, count);
       let delta = mod(i - base, count);
       if (delta > count / 2) delta -= count;
-      settleTo(base + delta);
+      settleTo(targetRef.current + delta);
     },
     [count, settleTo]
   );
 
   const step = useCallback(
     (dir) => {
-      settleTo(Math.round(posRef.current) + dir);
+      settleTo(targetRef.current + dir);
     },
     [settleTo]
   );
@@ -213,7 +224,10 @@ export default function PortfolioSection() {
   // Autoplay
   useEffect(() => {
     if (paused || isDragging) return;
-    const id = setInterval(() => step(1), AUTOPLAY_MS);
+    const id = setInterval(() => {
+      if (wheelingRef.current || drag.current.active) return;
+      step(1);
+    }, AUTOPLAY_MS);
     return () => clearInterval(id);
   }, [paused, isDragging, step]);
 
@@ -247,6 +261,7 @@ export default function PortfolioSection() {
       if (!delta) return;
       e.preventDefault();
       stopAnim();
+      wheelingRef.current = true;
       acc += delta;
       if (!raf) {
         raf = requestAnimationFrame(() => {
@@ -257,7 +272,10 @@ export default function PortfolioSection() {
         });
       }
       clearTimeout(endTimer);
-      endTimer = setTimeout(() => settleTo(Math.round(posRef.current)), 140);
+      endTimer = setTimeout(() => {
+        wheelingRef.current = false;
+        settleTo(Math.round(posRef.current));
+      }, 140);
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
@@ -302,8 +320,7 @@ export default function PortfolioSection() {
 
     const w = stageWRef.current || 600;
     const velocitySlides = d.velocity / (w * 0.6);
-    const target = Math.round(posRef.current - velocitySlides * 0.18);
-    settleTo(target);
+    settleTo(Math.round(posRef.current - velocitySlides * 0.18));
   };
 
   const onCardClick = (i) => {
