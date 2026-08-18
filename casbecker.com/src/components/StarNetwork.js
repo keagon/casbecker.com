@@ -72,8 +72,8 @@ export default function StarNetwork() {
   const resizeTimerRef = useRef(null);
 
   const interpolateColor = useCallback((progress) => {
-    const r1 = 199, g1 = 118, b1 = 56;  // accent color
-    const r2 = 77, g2 = 156, b2 = 179;  // primary color
+    const r1 = 199, g1 = 170, b1 = 56;  // accent color
+    const r2 = 136, g2 = 77, b2 = 179;  // primary color
     
     const r = Math.round(r1 + (r2 - r1) * progress);
     const g = Math.round(g1 + (g2 - g1) * progress);

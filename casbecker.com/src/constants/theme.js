@@ -1,11 +1,11 @@
 export const COLORS = {
   accent: {
-    rgb: '199, 118, 56',
-    hex: '#C77638'
+    rgb: '199, 170, 56',
+    hex: '#C7AA38'
   },
   primary: {
-    rgb: '77, 156, 179',
-    hex: '#4D9CB3'
+    rgb: '136, 77, 179',
+    hex: '#884DB3'
   }
 };
 
