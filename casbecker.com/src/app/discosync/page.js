@@ -15,7 +15,7 @@ export default function DiscoSyncPrivacyPage() {
       <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>
         DiscoSync Privacy Policy
       </h1>
-      <p style={{ color: "#555", marginBottom: 24 }}>Last updated: 2026-08-14</p>
+      <p style={{ color: "#555", marginBottom: 24 }}>Last updated: 2026-09-08</p>
 
       <section style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Overview</h2>
@@ -124,9 +124,12 @@ export default function DiscoSyncPrivacyPage() {
           <li>Leave a room at any time to drop your presence entry.</li>
           <li>Uninstall the app or clear app storage to remove local files and calibration.</li>
           <li>
-            Email{" "}
-            <a href="mailto:cas.interleaf@gmail.com">cas.interleaf@gmail.com</a> to ask
-            what we hold for your anonymous ID, or to request deletion.
+            Request deletion at{" "}
+            <a href="https://casbecker.com/discosync/delete">
+              casbecker.com/discosync/delete
+            </a>{" "}
+            or email{" "}
+            <a href="mailto:cas.interleaf@gmail.com">cas.interleaf@gmail.com</a>.
           </li>
         </ul>
       </section>
