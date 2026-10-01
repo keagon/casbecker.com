@@ -1,16 +1,19 @@
+import LiquidGlass from "@/components/LiquidGlass";
 import TypingAnimation from "@/components/TypingAnimation";
 
 export default function HeroSection({ isContactOpen, isResumeOpen, setIsResumeOpen, setIsContactOpen, showScrollButton }) {
   return (
     <section className="min-h-[100svh] flex items-center justify-center relative px-0 py-16 sm:py-20">
-      <div className={`container relative z-10 transition-all duration-400 ease-in-out ${isContactOpen || isResumeOpen ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+      <div className={`container relative z-10 transition-all duration-400 ease-in-out ${isContactOpen || isResumeOpen ? 'opacity-0 scale-95' : 'opacity-100'}`}>
         <div className="max-w-4xl mx-auto text-center space-y-8 sm:space-y-10 lg:space-y-12">
-          <h1 className="text-[1.75rem] leading-tight sm:text-4xl md:text-5xl lg:text-6xl font-bold text-text-50 tracking-tight text-balance">
-            <TypingAnimation delay={120}>HELLO WORLD, I'M CAS BECKER</TypingAnimation>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-text-100 animate-slide-up delay-100 leading-relaxed max-w-3xl mx-auto text-pretty px-1">
-            I'm an agile developer and social creator, specializing in Mendix, Front-End Development and creative project management.
-          </p>
+          <LiquidGlass className="hero-glass">
+            <h1 className="text-[1.75rem] leading-tight sm:text-4xl md:text-5xl lg:text-6xl font-bold text-text-50 tracking-tight text-balance">
+              <TypingAnimation delay={120}>HELLO WORLD, I'M CAS BECKER</TypingAnimation>
+            </h1>
+            <p className="hero-subtitle max-w-2xl mx-auto text-pretty">
+              I'm an agile developer and social creator, specializing in Mendix, Front-End Development and creative project management.
+            </p>
+          </LiquidGlass>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-stretch sm:items-center animate-slide-up delay-200 w-full max-w-md sm:max-w-none mx-auto">
             <button 
               onClick={() => setIsResumeOpen(true)}

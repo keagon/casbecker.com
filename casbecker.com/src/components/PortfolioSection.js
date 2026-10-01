@@ -34,6 +34,18 @@ const projects = [
     image: "/portfolio/hildebolt.jpg",
     tagline: "Speaker, host & trauma expert",
   },
+  {
+    title: "Pyke Maas",
+    url: "https://pykemaas.com",
+    image: "/portfolio/pykemaas.jpg",
+    tagline: "Creative producer & project leader",
+  },
+  {
+    title: "CreActie",
+    url: "https://creactie.com",
+    image: "/portfolio/creactie.jpg",
+    tagline: "Playful, accessible contact",
+  },
 ];
 
 const AUTOPLAY_MS = 5000;

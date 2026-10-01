@@ -1,3 +1,5 @@
+import LiquidGlass from "@/components/LiquidGlass";
+
 const services = [
   {
     icon: "diversity_3",
@@ -51,19 +53,18 @@ export default function ServicesSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-10">
           {services.map((service, index) => (
-            <article
+            <LiquidGlass
+              as="article"
+              lift
               key={service.title}
               className={[
-                "service-card animate-slide-up",
+                "service-card animate-fade-in",
                 index === 1 ? "delay-100" : "",
                 index === 2 ? "delay-200 sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none" : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
             >
-              {/* Glass sits BEHIND the panel (sibling) — avoids overflow+backdrop opacity bug */}
-              <div className="service-card__glass" aria-hidden="true" />
-
               <div className="service-card__panel">
                 <div className="service-card__visual">
                   <span className="material-symbols-rounded service-card__icon" aria-hidden="true">
@@ -76,7 +77,7 @@ export default function ServicesSection() {
                   <p className="service-card__description">{service.description}</p>
                 </div>
               </div>
-            </article>
+            </LiquidGlass>
           ))}
         </div>
       </div>
