@@ -34,14 +34,9 @@ export default function LiquidGlass({
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
     >
-      <div className="liquid-glass" aria-hidden="true">
-        <div className="liquid-glass__center" />
-        <div className="liquid-glass__rim" />
-        <div className="liquid-glass__sheen" />
-      </div>
       <div className="liquid-glass__body">{children}</div>
-      <div className="liquid-glass__specular" aria-hidden="true" />
-      <div className="liquid-glass__edge" aria-hidden="true" />
+      <div className="liquid-glass__border" aria-hidden="true" />
+      <div className="liquid-glass__glint" aria-hidden="true" />
     </Tag>
   );
 }

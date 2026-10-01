@@ -10,7 +10,7 @@ export default function HeroSection({ isContactOpen, isResumeOpen, setIsResumeOp
             <h1 className="text-[1.75rem] leading-tight sm:text-4xl md:text-5xl lg:text-6xl font-bold text-text-50 tracking-tight text-balance">
               <TypingAnimation delay={120}>HELLO WORLD, I'M CAS BECKER</TypingAnimation>
             </h1>
-            <p className="hero-subtitle text-base sm:text-lg md:text-xl leading-relaxed max-w-3xl mx-auto text-pretty">
+            <p className="hero-subtitle max-w-2xl mx-auto text-pretty">
               I'm an agile developer and social creator, specializing in Mendix, Front-End Development and creative project management.
             </p>
           </LiquidGlass>
