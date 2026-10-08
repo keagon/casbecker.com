@@ -6,7 +6,7 @@ export default function HeroSection({ isContactOpen, isResumeOpen, setIsResumeOp
     <section className="min-h-[100svh] flex items-center justify-center relative px-0 py-16 sm:py-20">
       <div className={`container relative z-10 transition-all duration-400 ease-in-out ${isContactOpen || isResumeOpen ? 'opacity-0 scale-95' : 'opacity-100'}`}>
         <div className="max-w-4xl mx-auto text-center space-y-8 sm:space-y-10 lg:space-y-12">
-          <LiquidGlass className="hero-glass">
+          <LiquidGlass className="hero-glass" animateHeight>
             <h1 className="text-[1.75rem] leading-tight sm:text-4xl md:text-5xl lg:text-6xl font-bold text-text-50 tracking-tight text-balance">
               <TypingAnimation delay={120}>HELLO WORLD, I'M CAS BECKER</TypingAnimation>
             </h1>

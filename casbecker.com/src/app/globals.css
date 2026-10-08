@@ -639,6 +639,11 @@
   .hero-glass {
     --liquid-radius: 2rem;
     @apply w-full;
+    overflow: hidden;
+    transition:
+      height 0.3s ease,
+      transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 560ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hero-glass .liquid-glass__body {
