@@ -1,6 +1,12 @@
-Oezoe's recording goes here as `oezoe.mp3`.
+The Ward monologues go here.
 
-The vault page at /oezoe plays `/audio/oezoe.mp3` when all four true names
-(BRAND, FEN, HEM, MORROW) have been entered.
+Each Ward page plays its own file:
+  /audio/cinderfowl.mp3   (The Cinderfowl)
+  /audio/mossskitter.mp3  (The Moss-Skitter)
+  /audio/thimblekin.mp3   (The Thimblekin)
+  /audio/glimmerkin.mp3   (The Glimmerkin)
 
-Add the file as: public/audio/oezoe.mp3
+Add them as: public/audio/<name>.mp3
+
+Oezoe's final speech is played live on speakers at the party (not on the site) —
+keep oezoe.mp3 on your phone.
