@@ -187,6 +187,7 @@ export default function OezoeVault() {
     renderer.toneMappingExposure = 1.08;
     mount.appendChild(renderer.domElement);
 
+    try {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x070509);
     scene.fog = new THREE.FogExp2(0x0a0608, small ? 0.085 : 0.07);
@@ -231,10 +232,18 @@ export default function OezoeVault() {
     const stone = new THREE.MeshStandardMaterial({ color: 0x2c2622, roughness: 0.95 });
     const fp = new THREE.Group();
     fp.position.set(-3.1, 0, -2.0);
-    fp.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.36, 1.3), stone), { position: new THREE.Vector3(0, 0.18, 0.4) }));
-    fp.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.9, 1.1), stone), { position: new THREE.Vector3(-1.15, 1.45, 0) }));
-    fp.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.9, 1.1), stone), { position: new THREE.Vector3(1.15, 1.45, 0) }));
-    fp.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.5, 1.1), stone), { position: new THREE.Vector3(0, 3.0, 0) }));
+    const hearthBase = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.36, 1.3), stone);
+    hearthBase.position.set(0, 0.18, 0.4);
+    fp.add(hearthBase);
+    const pillarL = new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.9, 1.1), stone);
+    pillarL.position.set(-1.15, 1.45, 0);
+    fp.add(pillarL);
+    const pillarR = new THREE.Mesh(new THREE.BoxGeometry(0.5, 2.9, 1.1), stone);
+    pillarR.position.set(1.15, 1.45, 0);
+    fp.add(pillarR);
+    const lintel = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.5, 1.1), stone);
+    lintel.position.set(0, 3.0, 0);
+    fp.add(lintel);
     const mantel = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.18, 1.35), new THREE.MeshStandardMaterial({ color: 0x3d2b1b, roughness: 0.65 }));
     mantel.position.set(0, 3.32, 0.18);
     fp.add(mantel);
@@ -424,6 +433,11 @@ export default function OezoeVault() {
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
     };
+    } catch (e) {
+      console.error('Oezoe scene error:', e);
+      setWebglFailed(true);
+      setBooted(true);
+    }
   }, []);
 
   const foundCount = found.length;
