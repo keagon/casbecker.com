@@ -2,40 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-
-const WARDS = [
-  {
-    id: 'cinderfowl',
-    name: 'The Cinderfowl',
-    trueName: 'BRAND',
-    where: 'beside the hearth',
-    blurb: 'A plucky red bird that nests in warm ashes.',
-  },
-  {
-    id: 'mossskitter',
-    name: 'The Moss-Skitter',
-    trueName: 'FEN',
-    where: 'in the bedchamber',
-    blurb: 'A quick green thing that hides where you least look.',
-  },
-  {
-    id: 'thimblekin',
-    name: 'The Thimblekin',
-    trueName: 'HEM',
-    where: 'in the smallest room',
-    blurb: 'A tiny guardian that sleeps inside a house of cloth.',
-  },
-  {
-    id: 'glimmerkin',
-    name: 'The Glimmerkin',
-    trueName: 'MORROW',
-    where: 'behind the looking-glass',
-    blurb: 'A pale creature whose reflection is always a half-second late.',
-  },
-];
+import { WARDS } from '../lib/wards';
 
 const FINAL_RIDDLE =
-  'All four true names are spoken, and the vault remembers. The key waits where the house breathes — behind the gasmeter, in the little cupboard by the first stairwell, a step below the first floor.';
+  'All four true names are spoken, and the vault remembers. The key to the strongbox waits behind the gasmeter, under the stairs — in the little cupboard by the first stairwell, a step below the first floor.';
 
 const KEYS = [
   'A', 'B', 'C', 'D', 'E', 'F',
@@ -80,7 +50,6 @@ const SEAL_ICONS = {
 export default function OezoeVault() {
   const mountRef = useRef(null);
   const inputRef = useRef(null);
-  const audioRef = useRef(null);
   const doorRef = useRef(null);
   const fireRef = useRef(null);
   const openRef = useRef(false);
@@ -90,7 +59,6 @@ export default function OezoeVault() {
   const [found, setFound] = useState([]);
   const [open, setOpen] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
-  const [audioState, setAudioState] = useState('idle');
   const [hint, setHint] = useState('');
   const [toast, setToast] = useState(null);
   const [booted, setBooted] = useState(false);
@@ -147,25 +115,6 @@ export default function OezoeVault() {
   useEffect(() => {
     if (found.length === WARDS.length && !openRef.current) setOpen(true);
   }, [found]);
-
-  useEffect(() => {
-    if (open && audioRef.current) {
-      const p = audioRef.current.play();
-      if (p && typeof p.then === 'function') {
-        p.then(() => setAudioState('playing')).catch(() => setAudioState('missing'));
-      }
-    }
-  }, [open]);
-
-  const playAudio = useCallback(() => {
-    const a = audioRef.current;
-    if (!a) return;
-    try { a.currentTime = 0; } catch (e) { /* ignore */ }
-    const p = a.play();
-    if (p && typeof p.then === 'function') {
-      p.then(() => setAudioState('playing')).catch(() => setAudioState('missing'));
-    }
-  }, []);
 
   // Three.js cinematic backdrop
   useEffect(() => {
@@ -534,12 +483,6 @@ export default function OezoeVault() {
                 </div>
               ))}
             </div>
-            <button type="button" className="vr-play" onClick={playAudio}>
-              {audioState === 'playing' ? 'Play Oezoe’s voice again' : 'Play Oezoe’s voice'}
-            </button>
-            {audioState === 'missing' && (
-              <p className="vr-warn">Audio not found at <code>/audio/oezoe.mp3</code> — add it to hear Oezoe speak.</p>
-            )}
           </div>
         )}
       </section>
@@ -551,8 +494,6 @@ export default function OezoeVault() {
           <span className="vr-toast-sub">{toast.name}</span>
         </div>
       )}
-
-      <audio ref={audioRef} src="/audio/oezoe.mp3" preload="auto" />
 
       <style jsx>{`
         .vr {
@@ -689,16 +630,6 @@ export default function OezoeVault() {
         }
         .vr-wardrow-name { color: #cbb98a; }
         .vr-wardrow-true { color: #ffe19a; letter-spacing: 2px; }
-        .vr-play {
-          margin-top: 2px; padding: 13px 26px; border: none; border-radius: 999px; cursor: pointer;
-          font-family: inherit; font-size: 14px; letter-spacing: 1px; color: #201404; font-weight: 600;
-          background: linear-gradient(180deg, #ffe19a, #e8bb52);
-          box-shadow: 0 10px 30px rgba(232,187,82,0.28);
-          transition: transform .12s, box-shadow .2s;
-        }
-        .vr-play:active { transform: scale(0.97); }
-        .vr-warn { margin: 12px 0 0; font-size: 12px; color: #c98a5a; line-height: 1.5; }
-        .vr-warn code { color: #e0a97a; }
         .vr-toast {
           position: absolute; top: max(56px, calc(env(safe-area-inset-top) + 40px)); left: 50%; transform: translateX(-50%);
           display: flex; flex-direction: column; align-items: center; gap: 2px;
