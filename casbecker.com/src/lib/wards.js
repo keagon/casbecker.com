@@ -24,8 +24,8 @@ export const WARDS = [
     audio: '/audio/mossskitter.mp3',
     riddleTitle: 'Seal II — the Moss-Skitter watches',
     riddle: [
-      'M · V · U',
-      'First turn it around; then set each letter against its opposite (A ↔ Z).',
+      'Look at the card where you found me. Say the plain word for what is drawn there — out loud, the way you would to a child.',
+      'Now let the end of it fall away, the way a skitter drops its tail. What is left is my true name.',
     ],
   },
   {
@@ -38,8 +38,8 @@ export const WARDS = [
     audio: '/audio/thimblekin.mp3',
     riddleTitle: 'Seal III — the Thimblekin hides',
     riddle: [
-      'I · G · P',
-      'The first is one ahead; the second, two; the third, three.',
+      'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters: H, E and M. Which is where? Read my card, and mind the clues.',
+      'Read the letters from left to right, and my true name will be standing there.',
     ],
   },
   {
@@ -50,10 +50,10 @@ export const WARDS = [
     blurb: 'A pale creature whose reflection is always a half-second late.',
     accent: '#b79ad6',
     audio: '/audio/glimmerkin.mp3',
-    riddleTitle: 'Seal IV — the Glimmerkin blinks',
+    riddleTitle: 'Seal IV — the Glimmerkin watches',
     riddle: [
-      'Hold this to the glass.',
-      '.eno kcab snrut ssalg eht · XPPSPN',
+      'What is always coming, but never arrives?',
+      'Name it. Then drop the to-ing and fro-ing — the coming-and-going part — and what is left is my true name.',
     ],
   },
 ];

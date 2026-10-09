@@ -62,19 +62,21 @@ export default function OezoeVault() {
   const [hint, setHint] = useState('');
   const [toast, setToast] = useState(null);
   const [booted, setBooted] = useState(false);
+  const [hintCount, setHintCount] = useState(null);
+  const hintCountRef = useRef(null);
 
   useEffect(() => { foundRef.current = found; }, [found]);
   useEffect(() => { openRef.current = open; }, [open]);
+  useEffect(() => { hintCountRef.current = hintCount; }, [hintCount]);
 
   const press = useCallback((key) => {
     if (openRef.current) return;
+    if (hintCountRef.current !== null) return;
     if (key === 'CLR') { setEntered(''); setHint(''); return; }
     if (key === 'BACK') { setEntered((e) => e.slice(0, -1)); return; }
     if (key === 'HINT') {
-      const remaining = WARDS.filter((w) => !foundRef.current.includes(w.id));
-      if (!remaining.length) { setHint('Every true name has been spoken.'); return; }
-      const w = remaining[0];
-      setHint(`${w.name} waits ${w.where}. Its true name begins with “${w.trueName[0]}”.`);
+      setHint('');
+      setHintCount(10);
       return;
     }
     if (/^[A-Z]$/.test(key)) {
@@ -86,6 +88,10 @@ export default function OezoeVault() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (hintCountRef.current !== null) {
+        if (e.key === 'Escape') setHintCount(null);
+        return;
+      }
       if (e.key === 'Backspace') { e.preventDefault(); press('BACK'); }
       else if (e.key === 'Escape' || e.key === 'Delete') press('CLR');
       else if (/^[a-zA-Z]$/.test(e.key)) press(e.key.toUpperCase());
@@ -115,6 +121,22 @@ export default function OezoeVault() {
   useEffect(() => {
     if (found.length === WARDS.length && !openRef.current) setOpen(true);
   }, [found]);
+
+  useEffect(() => {
+    if (hintCount === null) return undefined;
+    if (hintCount <= 0) {
+      const remaining = WARDS.filter((w) => !foundRef.current.includes(w.id));
+      if (!remaining.length) setHint('Every true name has been spoken.');
+      else {
+        const w = remaining[0];
+        setHint(`${w.name} waits ${w.where}. Its true name begins with “${w.trueName[0]}”.`);
+      }
+      setHintCount(null);
+      return undefined;
+    }
+    const t = setTimeout(() => setHintCount((c) => (c === null ? null : c - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [hintCount]);
 
   // Three.js cinematic backdrop
   useEffect(() => {
@@ -452,7 +474,7 @@ export default function OezoeVault() {
 
             <div className="vr-meta">
               <span>{foundCount} of 4 true names found</span>
-              <button type="button" className="vr-hintbtn" onClick={() => press('HINT')}>Need a hint?</button>
+              <button type="button" className="vr-hintbtn" disabled={hintCount !== null} onClick={() => press('HINT')}>Need a hint?</button>
             </div>
 
             {hint && <p className="vr-hint" role="status">{hint}</p>}
@@ -492,6 +514,19 @@ export default function OezoeVault() {
           <span className="vr-toast-tag">True name found</span>
           <span className="vr-toast-name">{toast.trueName}</span>
           <span className="vr-toast-sub">{toast.name}</span>
+        </div>
+      )}
+
+      {hintCount !== null && (
+        <div className="vr-confirm" role="dialog" aria-modal="true" aria-label="Confirm hint">
+          <div className="vr-confirm-box">
+            <p className="vr-confirm-kicker">The house hesitates…</p>
+            <p className="vr-confirm-text">A hint will be given when the count ends.</p>
+            <p className="vr-confirm-count">{hintCount}</p>
+            <button type="button" className="vr-confirm-btn" onClick={() => setHintCount(null)}>
+              Cancel
+            </button>
+          </div>
         </div>
       )}
 
@@ -602,7 +637,36 @@ export default function OezoeVault() {
           background: none; border: none; color: #d9bf78; cursor: pointer;
           font-family: inherit; font-size: 11px; letter-spacing: 1px; text-decoration: underline; text-underline-offset: 3px; padding: 6px 0;
         }
+        .vr-hintbtn:disabled { opacity: 0.4; cursor: default; }
         .vr-hint { margin: 6px auto 4px; max-width: 340px; font-size: 12.5px; color: #d9bf78; line-height: 1.5; }
+        .vr-confirm {
+          position: absolute; inset: 0; z-index: 40;
+          display: flex; align-items: center; justify-content: center;
+          background: rgba(4,3,6,0.72);
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+        }
+        .vr-confirm-box {
+          width: min(86vw, 340px);
+          padding: 24px 22px 20px;
+          border-radius: 18px;
+          text-align: center;
+          background: linear-gradient(180deg, rgba(30,22,14,0.96), rgba(12,9,14,0.98));
+          border: 1px solid rgba(233,201,107,0.35);
+          box-shadow: 0 24px 70px rgba(0,0,0,0.7);
+          animation: vrfade .25s ease both;
+        }
+        .vr-confirm-kicker { margin: 0 0 6px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #b7955a; }
+        .vr-confirm-text { margin: 0 0 10px; font-size: 13px; line-height: 1.5; color: #cbb98a; }
+        .vr-confirm-count { margin: 0 0 14px; font-size: 44px; line-height: 1; color: #ffe19a; }
+        .vr-confirm-btn {
+          padding: 9px 22px; border-radius: 999px; cursor: pointer;
+          font-family: inherit; font-size: 12px; letter-spacing: 1px;
+          color: #e5cf8f; background: rgba(10,8,13,0.6);
+          border: 1px solid rgba(233,201,107,0.35);
+        }
+        .vr-confirm-btn:hover { border-color: rgba(255,210,110,0.7); }
+        @keyframes vrfade { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
         .vr-keypad {
           display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px;
           margin: 12px auto 4px; max-width: 360px;
