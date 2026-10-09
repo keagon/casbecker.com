@@ -12,7 +12,7 @@ const KEYS = [
   'G', 'H', 'I', 'J', 'K', 'L',
   'M', 'N', 'O', 'P', 'Q', 'R',
   'S', 'T', 'U', 'V', 'W', 'X',
-  'Y', 'Z', 'CLR', 'BACK', 'HINT',
+  'Y', 'Z', 'CLR', 'BACK', 'HINT', 'ENTER',
 ];
 
 function makeFireTexture() {
@@ -54,6 +54,8 @@ export default function OezoeVault() {
   const fireRef = useRef(null);
   const openRef = useRef(false);
   const foundRef = useRef([]);
+  const enteredRef = useRef('');
+  const cooldownRef = useRef(0);
 
   const [entered, setEntered] = useState('');
   const [found, setFound] = useState([]);
@@ -64,14 +66,62 @@ export default function OezoeVault() {
   const [booted, setBooted] = useState(false);
   const [hintCount, setHintCount] = useState(null);
   const hintCountRef = useRef(null);
+  const [cooldown, setCooldown] = useState(0);
+  const [kbOffset, setKbOffset] = useState(0);
 
   useEffect(() => { foundRef.current = found; }, [found]);
   useEffect(() => { openRef.current = open; }, [open]);
   useEffect(() => { hintCountRef.current = hintCount; }, [hintCount]);
+  useEffect(() => { enteredRef.current = entered; }, [entered]);
+  useEffect(() => { cooldownRef.current = cooldown; }, [cooldown]);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      const overlap = Math.max(0, window.innerHeight - (vv.height + vv.offsetTop));
+      setKbOffset(overlap > 40 ? overlap : 0);
+    };
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
+  const submit = useCallback(() => {
+    if (openRef.current || cooldownRef.current > 0 || hintCountRef.current !== null) return;
+    const code = enteredRef.current.toUpperCase();
+    if (!code) return;
+    const match = WARDS.find((w) => w.trueName === code);
+    if (match) {
+      if (!foundRef.current.includes(match.id)) {
+        setFound((f) => [...f, match.id]);
+        setToast({ name: match.name, trueName: match.trueName });
+      }
+      setEntered('');
+      setHint('');
+      return;
+    }
+    // Wrong attempt: the vault sleeps for a minute.
+    setEntered('');
+    setHint('');
+    setCooldown(60);
+  }, []);
 
   const press = useCallback((key) => {
     if (openRef.current) return;
     if (hintCountRef.current !== null) return;
+    if (cooldownRef.current > 0) return;
+    if (key === 'ENTER') { submit(); return; }
     if (key === 'CLR') { setEntered(''); setHint(''); return; }
     if (key === 'BACK') { setEntered((e) => e.slice(0, -1)); return; }
     if (key === 'HINT') {
@@ -83,22 +133,26 @@ export default function OezoeVault() {
       setHint('');
       setEntered((e) => (e.length >= 6 ? e : e + key));
     }
-  }, []);
+  }, [submit]);
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'Enter') { e.preventDefault(); submit(); return; }
       if (hintCountRef.current !== null) {
         if (e.key === 'Escape') setHintCount(null);
         return;
       }
+      if (e.key === 'Escape' || e.key === 'Delete') { press('CLR'); return; }
+      // When the field is focused, let the native input handle characters and
+      // backspace; its onChange is the single source of truth.
+      if (e.target === inputRef.current) return;
       if (e.key === 'Backspace') { e.preventDefault(); press('BACK'); }
-      else if (e.key === 'Escape' || e.key === 'Delete') press('CLR');
       else if (/^[a-zA-Z]$/.test(e.key)) press(e.key.toUpperCase());
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [press]);
+  }, [press, submit]);
 
   useEffect(() => {
     const code = entered.toUpperCase();
@@ -415,6 +469,7 @@ export default function OezoeVault() {
   const slots = 6;
 
   const onChange = (e) => {
+    if (cooldownRef.current > 0) return;
     const v = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, slots);
     setEntered(v);
     setHint('');
@@ -432,7 +487,7 @@ export default function OezoeVault() {
         <span>The Manor of the Passion Vulture</span>
       </header>
 
-      <section className={`vr-console ${booted ? 'is-in' : ''}`}>
+      <section className={`vr-console ${booted ? 'is-in' : ''}`} style={{ '--kb': `${kbOffset}px` }}>
         {!open ? (
           <>
             <p className="vr-kicker">The Vigil</p>
@@ -460,6 +515,7 @@ export default function OezoeVault() {
                 ref={inputRef}
                 value={entered}
                 onChange={onChange}
+                disabled={cooldown > 0}
                 inputMode="text"
                 autoCapitalize="characters"
                 autoCorrect="off"
@@ -467,15 +523,21 @@ export default function OezoeVault() {
                 spellCheck={false}
                 enterKeyHint="done"
                 aria-label="Type a true name"
-                placeholder="type a true name"
+                placeholder={cooldown > 0 ? 'the vault is unmoved…' : 'type a true name'}
               />
               <span className="vr-caret" aria-hidden="true" />
             </label>
 
             <div className="vr-meta">
               <span>{foundCount} of 4 true names found</span>
-              <button type="button" className="vr-hintbtn" disabled={hintCount !== null} onClick={() => press('HINT')}>Need a hint?</button>
+              <button type="button" className="vr-hintbtn" disabled={hintCount !== null || cooldown > 0} onClick={() => press('HINT')}>Need a hint?</button>
             </div>
+
+            {cooldown > 0 && (
+              <p className="vr-lock" role="status">
+                The vault is unmoved. Try again in {Math.floor(cooldown / 60)}:{String(cooldown % 60).padStart(2, '0')}.
+              </p>
+            )}
 
             {hint && <p className="vr-hint" role="status">{hint}</p>}
 
@@ -485,6 +547,7 @@ export default function OezoeVault() {
                   key={k}
                   type="button"
                   className={`vr-key ${k.length > 1 ? 'is-action' : ''}`}
+                  disabled={cooldown > 0}
                   onClick={() => press(k)}
                 >
                   {k}
@@ -639,6 +702,8 @@ export default function OezoeVault() {
         }
         .vr-hintbtn:disabled { opacity: 0.4; cursor: default; }
         .vr-hint { margin: 6px auto 4px; max-width: 340px; font-size: 12.5px; color: #d9bf78; line-height: 1.5; }
+        .vr-lock { margin: 6px auto 4px; max-width: 340px; font-size: 12.5px; color: #e0836a; line-height: 1.5; }
+        .vr-field input:disabled { opacity: 0.6; cursor: not-allowed; }
         .vr-confirm {
           position: absolute; inset: 0; z-index: 40;
           display: flex; align-items: center; justify-content: center;
@@ -685,6 +750,8 @@ export default function OezoeVault() {
         .vr-key:hover { border-color: rgba(255,210,110,0.5); }
         .vr-key:active { transform: scale(0.94); background: rgba(60,42,18,0.9); }
         .vr-key.is-action { font-size: 11px; letter-spacing: 1px; color: #b7955a; }
+        .vr-key:disabled, .vr-key:disabled:hover { opacity: 0.38; cursor: not-allowed; border-color: rgba(233,201,107,0.16); }
+        .vr-key:disabled:active { transform: none; background: linear-gradient(180deg, rgba(30,22,14,0.9), rgba(16,12,17,0.9)); }
         .vr-open { display: flex; flex-direction: column; align-items: center; }
         .vr-riddle { margin: 10px 0 16px; font-size: 15px; line-height: 1.65; color: #e7d7ac; }
         .vr-wardlist { width: 100%; margin: 0 0 18px; border-top: 1px solid rgba(233,201,107,0.14); }
@@ -715,11 +782,11 @@ export default function OezoeVault() {
           .vr-console {
             width: 100%;
             max-width: 100%;
-            left: 0; right: 0; top: auto; bottom: 0;
+            left: 0; right: 0; top: auto; bottom: var(--kb, 0px);
             transform: none;
             border-radius: 22px 22px 0 0;
             padding: 22px 20px calc(22px + env(safe-area-inset-bottom));
-            max-height: 82dvh;
+            max-height: calc(82dvh - var(--kb, 0px));
           }
         }
         @media (min-width: 760px) {
