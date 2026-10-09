@@ -9,9 +9,9 @@ export const WARDS = [
     audio: '/audio/cinderfowl.mp3',
     riddleTitle: 'Seal I — the Cinderfowl stirs',
     riddle: [
-      'In the hearth ledger, names are counted, then cooled.',
+      'The ledger was never written in letters, only in numbers.',
       '3 · 19 · 2 · 15 · 5',
-      '(A = 1, B = 2 … Z = 26. The fire dims by one.)',
+      '(Count the alphabet from A — then let the fire cool each one by a single step.)',
     ],
   },
   {
@@ -38,7 +38,7 @@ export const WARDS = [
     audio: '/audio/thimblekin.mp3',
     riddleTitle: 'Seal III — the Thimblekin hides',
     riddle: [
-      'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters: H, E and M. Which is where? Read my card, and mind the clues.',
+      'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters: H, E and M. Which is where? Read my card, and mind the clues; one of them is only there to catch you out.',
       'Read the letters from left to right, and my true name will be standing there.',
     ],
   },
