@@ -38,7 +38,7 @@ export const WARDS = [
     audio: '/audio/thimblekin.mp3',
     riddleTitle: 'Seal III — the Thimblekin hides',
     riddle: [
-      'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters: H, E and M. Which is where? Read my card, and mind the clues; one of them is only there to catch you out.',
+      'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters. Which is where? Read my card, and weigh every clue; none of them is idle.',
       'Read the letters from left to right, and my true name will be standing there.',
     ],
   },
