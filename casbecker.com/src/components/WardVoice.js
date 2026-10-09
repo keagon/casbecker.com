@@ -1,10 +1,15 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function WardVoice({ ward }) {
   const audioRef = useRef(null);
   const [state, setState] = useState('idle');
+  const [hintCount, setHintCount] = useState(null);
+  const [hintLevel, setHintLevel] = useState(0);
+
+  const hints = ward.hints || [];
+  const hintDone = hints.length > 0 && hintLevel >= hints.length;
 
   const play = () => {
     const a = audioRef.current;
@@ -17,6 +22,17 @@ export default function WardVoice({ ward }) {
       setState('playing');
     }
   };
+
+  useEffect(() => {
+    if (hintCount === null) return undefined;
+    if (hintCount <= 0) {
+      setHintLevel((l) => Math.min(l + 1, hints.length));
+      setHintCount(null);
+      return undefined;
+    }
+    const t = setTimeout(() => setHintCount((c) => (c === null ? null : c - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [hintCount, hints.length]);
 
   const label =
     state === 'playing' ? 'The Ward is speaking…'
@@ -58,7 +74,40 @@ export default function WardVoice({ ward }) {
             ))}
           </div>
         </details>
+
+        {hints.length > 0 && (
+          <div className="wv-hintzone">
+            <button
+              type="button"
+              className="wv-hintbtn"
+              disabled={hintCount !== null || hintDone}
+              onClick={() => setHintCount(10)}
+            >
+              {hintDone ? 'The Ward has told you all it will' : 'Ask the Ward for a hint'}
+            </button>
+            {hintLevel > 0 && (
+              <div className="wv-hintbox">
+                {hints.slice(0, hintLevel).map((h, i) => (
+                  <p key={i}>{h}</p>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
+
+      {hintCount !== null && (
+        <div className="wv-confirm" role="dialog" aria-modal="true" aria-label="Confirm hint">
+          <div className="wv-confirm-box">
+            <p className="wv-confirm-kicker">The Ward hesitates…</p>
+            <p className="wv-confirm-text">A hint will be given when the count ends.</p>
+            <p className="wv-confirm-count">{hintCount}</p>
+            <button type="button" className="wv-confirm-btn" onClick={() => setHintCount(null)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       <audio
         ref={audioRef}
@@ -150,6 +199,48 @@ export default function WardVoice({ ward }) {
         }
         .wv-riddle p { margin: 4px 0; }
         .wv-riddle-title { color: #cbb98a; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+        .wv-hintzone { margin-top: 16px; }
+        .wv-hintbtn {
+          background: none; border: none; color: #d9bf78; cursor: pointer;
+          font-family: inherit; font-size: 12px; letter-spacing: 1px;
+          text-decoration: underline; text-underline-offset: 3px; padding: 6px 0;
+        }
+        .wv-hintbtn:disabled { opacity: 0.4; cursor: default; text-decoration: none; }
+        .wv-hintbox {
+          margin-top: 10px; padding: 12px 14px; border-radius: 12px;
+          border: 1px dashed rgba(233,201,107,0.28);
+          background: rgba(6,5,9,0.5);
+          font-size: 13px; line-height: 1.6; color: #e7d7ac; text-align: center;
+        }
+        .wv-hintbox p { margin: 4px 0; }
+        .wv-confirm {
+          position: absolute; inset: 0; z-index: 40;
+          display: flex; align-items: center; justify-content: center;
+          background: rgba(4,3,6,0.72);
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+        }
+        .wv-confirm-box {
+          width: min(86vw, 340px);
+          padding: 24px 22px 20px;
+          border-radius: 18px;
+          text-align: center;
+          background: linear-gradient(180deg, rgba(30,22,14,0.96), rgba(12,9,14,0.98));
+          border: 1px solid rgba(233,201,107,0.35);
+          box-shadow: 0 24px 70px rgba(0,0,0,0.7);
+          animation: wvfade .25s ease both;
+        }
+        .wv-confirm-kicker { margin: 0 0 6px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #b7955a; }
+        .wv-confirm-text { margin: 0 0 10px; font-size: 13px; line-height: 1.5; color: #cbb98a; }
+        .wv-confirm-count { margin: 0 0 14px; font-size: 44px; line-height: 1; color: #ffe19a; }
+        .wv-confirm-btn {
+          padding: 9px 22px; border-radius: 999px; cursor: pointer;
+          font-family: inherit; font-size: 12px; letter-spacing: 1px;
+          color: #e5cf8f; background: rgba(10,8,13,0.6);
+          border: 1px solid rgba(233,201,107,0.35);
+        }
+        .wv-confirm-btn:hover { border-color: rgba(255,210,110,0.7); }
+        @keyframes wvfade { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
         @media (prefers-reduced-motion: reduce) {
           .wv-play { transition: none; }
         }

@@ -13,6 +13,11 @@ export const WARDS = [
       '3 · 19 · 2 · 15 · 5',
       '(Count the alphabet from A — then let the fire cool each one by a single step.)',
     ],
+    hints: [
+      '① A = 1 — count the alphabet from A.',
+      '② It becomes letters first, then each one shifts.',
+      '③ Cool each letter by one step → B R A N D.',
+    ],
   },
   {
     id: 'mossskitter',
@@ -26,6 +31,11 @@ export const WARDS = [
     riddle: [
       'Look at the card where you found me. Say the plain word for what is drawn there — out loud, the way you would to a child.',
       'Now let the end of it fall away, the way a skitter drops its tail. What is left is my true name.',
+    ],
+    hints: [
+      '① Say what the picture is — out loud.',
+      '② Let the end of it fall away.',
+      '③ Drop its last sound → F E N.',
     ],
   },
   {
@@ -41,6 +51,11 @@ export const WARDS = [
       'I keep three thimbles in a row — brass, silver and bone — and in them sleep three letters. Which is where? Read my card, and weigh every clue; none of them is idle.',
       'Read the letters from left to right, and my true name will be standing there.',
     ],
+    hints: [
+      '① Start with which thimble the E must be in.',
+      '② In a row of three, two letters that aren\'t neighbours must be at the two ends.',
+      '③ Silver = H, brass = M → H E M.',
+    ],
   },
   {
     id: 'glimmerkin',
@@ -54,6 +69,11 @@ export const WARDS = [
     riddle: [
       'What is always coming, but never arrives?',
       'Name it. Then drop the to-ing and fro-ing — the coming-and-going part — and what is left is my true name.',
+    ],
+    hints: [
+      '① It\'s a day.',
+      '② Tomorrow.',
+      '③ Drop the "to" → M O R R O W.',
     ],
   },
 ];
